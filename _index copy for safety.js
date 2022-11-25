@@ -21,11 +21,10 @@ class Character {
     this.attacks = attacksArr;
   }
   printCertificate() {
-    let certificate = `You are ${this.name} won the competition and deserve to receive this certificate
-                           
+    return `You are ${this.name} won the competition and deserve to receive this certificate
+                                          
     
     `;
-    return certificate;
   }
   printInventory() {
     return `You have \n ${this.inventory[0].content} pcs ${this.inventory[0].name}\n ${this.inventory[2].content} pcs ${this.inventory[2].name}`;

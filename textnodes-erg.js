@@ -1,6 +1,7 @@
-const textNode4 = {
+// Node 4
+{
   id: 4,
-  text: `Du verlässt die Kneipe und stehst auf der offenen Straße. Es ist kalt. Saukalt. Eine Kutsche steht keine 10 Meter von dir entfernt und eine Person starrt dich unverholen an.
+  text: `Du verlässt die Kneipe und stehst auf der offenen Straße. Es ist kalt. Saukalt. Eine Kutsche steht keine 10 Meter von dir entfernt und eine untersetzte Person auf dem gegenüberliegenden Bordstein, die dich unverholen anstarrt.
     \n
    Was willst du tun?\n`,
   options: [
@@ -8,27 +9,83 @@ const textNode4 = {
       text: "\n1. Die Person ansprechen!\n",
       nextText: 5,
     },
-
     {
       text: "\n2. Die Kutsche ansprechen\n",
       nextText: 6,
     },
     {
-      text: "\n1. Umfallen und liegen bleiben. -scheiß tag\n",
-      nextText: 7,
+      text: "\n3. Umfallen und liegen bleiben. Scheiß tag.\n",
+      nextText: 10,
     },
     {
-      text: "\n1. Gott anbeten!\n",
+      text: "\n4. Gott anbeten!\n",
       nextText: 8,
     },
   ],
-};
-
-const textNode5 = {
+},
+//Node 5
+{
   id: 5,
-  text: `Du sprichst die Person an.
+  text: `Du gehst leicht schwankend auf die Gestalt zu.
     \n
-   Dann sagt er zu dir: -Ich habe Leichen gesehen, die lebendiger aussehen als du. Brauchst du Hilfe??\n`,
+    Als du sie erreichst, raunt sie dir entgegen: Ich habe Leichen gesehen, die lebendiger aussehen als du. Brauchst du Hilfe?\n
+    Was willst du tun?\n`,
+  options: [
+    {
+      text: "\n1. Nach der Adresse auf dem Schnipsel fragen.\n",
+      nextText: 9,
+    },
+    {
+      text: "\n2. Nach Geld fragen.\n",
+      nextText: 10,
+    },
+    {
+      text: "\n3. Nach dem aktuellen Datum fragen\n",
+      nextText: 11,
+    },
+    {
+      text: "\n4. Die Person beleidigen\n",
+      nextText: 12,
+    },
+  ],
+},
+// Node 6
+ {
+  id: 6,
+  text: `Du gehst auf den Kutscher zu, der dich herablassend anschaut. Eine junge Frau sitzt schon in der Kutsche. Du findest sie so 
+    schön und fragst dich, ob du mit ihr ein paar Minuten reden kanst.
+    \n 
+    Der Kutscher sieht deinen Blick und fragt: 'Wo solls denn higehen?'\n#
+    Was willst du tun?\n`,
+    
+  options: [
+    {
+      text: "\n1. Ihm nuscheln die Adresse auf dem Zettel zeigen.\n",
+      nextText: 13,
+    },
+
+    {
+      text: "\n2. Sagen, dass du in die gleiche Richtung wie die schöne Dame fährst.\n",
+      nextText: 14,
+    },
+    {
+      text: "\n3. Fragen wieviel eine Fahrt kostet.\n",
+      nextText: 15,
+    },
+    {
+      text: "\n4. Dankend ablehnen, du hast kein Geld bei dir.\n",
+      nextText: 4,
+    },
+  ],
+},
+
+// Node 8
+{
+  id: 8,
+  text: `Du kniest dich in der Kälte auf die Straße und fängst an zu beten.
+      \n
+     Eine sonnenhelle Gestalt schwebt zu dir herab, legt dir sanft die Hand auf die Schulter und erinnert dich daran, dass du den Zettel mit der Adresse in der Tasche hast.\n
+     Was willst du tun?\n`,
   options: [
     {
       text: "\n1. Die Person nach der Adresse auf dem Schnipsel fragen.\n",
@@ -36,94 +93,29 @@ const textNode5 = {
     },
 
     {
-      text: "\n2. Die Person nach Geld fragen\n",
-      nextText: 10,
+      text: "\n2. Dem Kutscher sagen, dass du zu der Adresse auf dem Zettel willst.\n",
+      nextText: 13,
     },
     {
-      text: "\n1. Die Person nach Datum fragen\n",
+      text: "\n3. Die Person nach dem aktuellen Datum fragen\n",
       nextText: 11,
     },
     {
-      text: "\n1. Die Person beleidigen and sagen: -Hackts bei dir du Arschgeige\n",
-      nextText: 12,
+      text: "\n4. Zurück in die Kneipe gehen und dich erstmal aufwärmen.\n",
+      nextText: 10,
     },
   ],
 };
-
-const textNode6 = {
-  id: 6,
-  text: `Du sprichst die Kutsche an. Eine junge Frau sieht schon in der Kutsche. Du findest die so 
-    schön und fragst dich, ob du mit ihr ein parr Minute reden kanst.
-    \n 
-    Der Kutscher sagt: -Wo solls denn higehen???\n`,
-  options: [
-    {
-      text: "\n1. -Ich fahre zu diese Adresse (Die Adresse auf dem Zettel sagen)\n",
-      nextText: 13,
-    },
-
-    {
-      text: "\n2. -Ich fahre in die gleiche Richtung wie die schöne Dame \n",
-      nextText: 14,
-    },
-    {
-      text: "\n1. -Geh weg mit deiner hässlichen Kutsche\n",
-      nextText: 15,
-    },
-    {
-      text: "\n1.  -Danke aber ich habe nicht genug Geld\n",
-      nextText: 16,
-    },
-  ],
-};
-
-const textNode7 = {
-  id: 7,
-  text: `Du fällst um, und bleibst liegen. -scheiß tag.
-    \n
-Im selben Moment fährt dich um\n`,
-  options: [
-    {
-      text: "\n1. Game over!\n",
-      nextText: 0,
-    },
-  ],
-};
-
-const textNode8 = {
-  id: 8,
-  text: `Du betest Gott an.
-      \n
-     Er ist dir Gnädig and schickt dir einen Engel der dir sagt: -\n`,
-  options: [
-    {
-      text: "\n1. Die Person nach der Adresse auf dem Schnipsel fragen.\n",
-      nextText: 0,
-    },
-
-    {
-      text: "\n2. Die Person nach Geld fragen\n",
-      nextText: 0,
-    },
-    {
-      text: "\n1. Die Person nach Datum fragen\n",
-      nextText: 0,
-    },
-    {
-      text: "\n1. Die Person beleidigen and sagen: -Hackts bei dir du Arschgeige\n",
-      nextText: 0,
-    },
-  ],
-};
-
-const textNode9 = {
+//Node 9
+ {
   id: 9,
-  text: `Nachdem du die Person nach der Adresse gefragt hast, sagt er zu dir: 
+  text: `Du holst den zerknüllten Zettel aus deiner Hosentasche und hälst ihn vor das Gesicht deines Gegenübers. 'Da will ich hin', bringst du noch hervor. 
       \n
-     -Das ist keine 5 Minuten von hier, du erkennst es an der Bäckerei im Erdgeschoss\n`,
+     'Das ist keine 5 Minuten von hier, du erkennst es an einer Bäckerei im Erdgeschoss.', antwortet dein Gegenüber, und beschreibt dir den Weg.\n
+     Was willst du tun?\n`,
   options: [
     {
-      text: "\n1. Zur Bäckerei gehen ???\n",
+      text: "\n1. Zur Bäckerei gehen ?\n",
       nextText: 10,
     },
 

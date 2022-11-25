@@ -1,48 +1,48 @@
 var readlineSync = require("readline-sync");
 console.clear();
-class Character {
-  constructor(name, life, inventory) {
-    this.name = name;
-    this.life = life;
-    this.inventory = inventory;
-  }
-}
+// class Character {
+//   constructor(name, life, inventory) {
+//     this.name = name;
+//     this.life = life;
+//     this.inventory = inventory;
+//   }
+// }
 
-/** Testchar */
-const test = new Character("test", 100, [{ name: "Messer", damage: 30 }]);
-const attacksArr = [
-  { name: "Ohrfeige", damage: 10 },
-  { name: "Faustschlag", damage: 20 },
-  { name: "Tritt gegen das Knie", damage: 30 },
-];
+// /** Testchar */
+// const test = new Character("test", 100, [{ name: "Messer", damage: 30 }]);
+// const attacksArr = [
+//   { name: "Ohrfeige", damage: 10 },
+//   { name: "Faustschlag", damage: 20 },
+//   { name: "Tritt gegen das Knie", damage: 30 },
+// ];
 
-/** Testperson */
-const person = {
-  name: "Donnie Darko",
-  life: 100,
-  attacks: attacksArr,
-};
+// /** Testperson */
+// const person = {
+//   name: "Donnie Darko",
+//   life: 100,
+//   attacks: attacksArr,
+// };
 
 /** boss */
-const disaster = {
-  name: "Chaooos",
-  life: 999,
-  attacks: [
-    { name: "Du stolperst über einen Stapel Bücher!", damage: 20 },
-    {
-      name: "Deine Füße verheddern sich in einem herumliegenden Pullover!",
-      damage: 20,
-    },
-    {
-      name: "Du schlitterst über deine nassen Badfließen. Wasserschaden!",
-      damage: 20,
-    },
-    {
-      name: "Du hälst dich an einem Regal fest und ringst nach Atem. Es löst sich von der Wand und der Inhalt begräbt dich unter sich.",
-      damage: 20,
-    },
-  ],
-};
+// const disaster = {
+//   name: "Chaooos",
+//   life: 999,
+//   attacks: [
+//     { name: "Du stolperst über einen Stapel Bücher!", damage: 20 },
+//     {
+//       name: "Deine Füße verheddern sich in einem herumliegenden Pullover!",
+//       damage: 20,
+//     },
+//     {
+//       name: "Du schlitterst über deine nassen Badfließen. Wasserschaden!",
+//       damage: 20,
+//     },
+//     {
+//       name: "Du hälst dich an einem Regal fest und ringst nach Atem. Es löst sich von der Wand und der Inhalt begräbt dich unter sich.",
+//       damage: 20,
+//     },
+//   ],
+// };
 
 /** function for bossfight */
 function fight_desaster(enemy) {
