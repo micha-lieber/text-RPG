@@ -109,7 +109,7 @@ function reboot() {
 
 /** starts Battle with non-Boss enemy*/
 function fight(enemy) {
-  while (enemy.life > 0 && test.life > 0) {
+  while (enemy.life > 0 && char.life > 0) {
     // player attack
     let answer = readlineSync.question(
       `Was willst du tun? (0 = Ohrfeige, 1 = Faustschlag, 2 = Tritt gegen das Knie, 3 = warten)\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n`
