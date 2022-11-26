@@ -1,4 +1,5 @@
 var readlineSync = require("readline-sync");
+var figlet = require("figlet");
 /////// Variables for the Game
 
 /**Default attacks*/
@@ -21,11 +22,17 @@ class Character {
     this.attacks = attacksArr;
   }
   printCertificate() {
-    let certificate = `You are ${this.name} won the competition and deserve to receive this certificate
-                           
-    
-    `;
-    return certificate;
+    return figlet.text(`  Hay  ${this.name} \n   Du hast \n gewonnen`, {
+      font: 'Ghost',
+      horizontalLayout: 'default',
+      verticalLayout: 'default',
+      width: 150,
+      whitespaceBreak: true
+    }, function (err, data) {
+      console.log(data);
+    });
+
+
   }
   printInventory() {
     return `You have \n ${this.inventory[0].content} pcs ${this.inventory[0].name}\n ${this.inventory[2].content} pcs ${this.inventory[2].name}`;
@@ -294,3 +301,4 @@ function random() {
 //     characterCreation(); // creates custom named character
 //     situation() // ruft Startsetting auf
 // }
+console.log(char.printCertificate())
