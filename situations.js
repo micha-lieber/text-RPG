@@ -1,333 +1,1005 @@
+// INITIALIZE READLINESYNC TO ENABLE PLAYER INPUT QUERY
 let readlineSync = require("readline-sync");
 
+// RUN "NPM INSTALL CLI-COLOR" BEFOREHAND!!
+let clc = require("cli-color");
+
 function startGame() {
-  // GAME ALWAYS STARTS WITH SCENE 1
+  // GAME ALWAYS STARTS WITH SCENE 00  
   showTextNode(0);
-}
+};
 
 // TEXTNODE => AN ENTIRE SCENE
 let textNode;
 
+// FUNCTION CONTAINING ALL CONDITIONS FOR SCENE SEQUENCE
 function showTextNode(textNodeIndex) {
-  // FIND SCENE BY ID AND LOG ITS TEXT FIRST
+  
+  // FINDS A SCENE BY ID AND LOGS ITS TEXT FIRST
   textNode = textNodes.find((textNode) => textNode.id === textNodeIndex);
-  console.log(textNode.text);
-
-  // MAP THROUGH OPTIONS OF TEXTNODE AND LOG THEM SECOND
-  textNode.options.map((option) => console.log(option.text));
-
+  
+  // ENHANCES VISUAL CLARITY WITH COLOR VARIETY
+  // TURNS START SCREEN YELLOW AND OTHER SCENES CYAN
+  if (textNodeIndex == 0)
+  console.log(clc.yellow(textNode.text));
+  else
+  console.log(clc.cyan(textNode.text));
+  
+  // MAPS THROUGH OPTIONS OF A SCENE AND LOGS THEM SECOND
+  textNode.options.map((option) => console.log(clc.whiteBright(option.text)));   
+  
   // CHECKS FOR BAD CHOICE AND SENDS PLAYER TO DEATH SCENE
   // A BAD CHOICE IS ANY OPTION WITH NEXTTEXT 10
-  if (textNode.options[0].nextText === 10) {
-    console.log("\n\n\nGAME OVER MAN, GAME OVER\n\n\n");
-
-    // console.clear() => ERROR, FIX LATER
-
-    // REBOOT GAME AFTER PLAYER MADE BAD CHOICE
+  if (textNode.options[0].nextText === 99) {
+    console.log(clc.red("\n\n                --x----x----x----x----x----x----x----x----x----x-- \n                        ~~> GAME OVER, MAN! GAME OVER! <~~\n                --x----x----x----x----x----x----x----x----x----x--\n\n\n"));
+    
+    // REBOOTS GAME AFTER PLAYER MADE BAD CHOICE
     startGame();
-  }
-
-  // ASK PLAYER TO CHOOSE FROM MAX 4 OPTIONS
+  };
+  
+  // ASKS PLAYER TO CHOOSE FROM MAX 4 OPTIONS
   let answer = readlineSync.question();
-
-  let nextSceneLen = textNode.options.length;
-
-  // REPLAY SCENE UPON FAULTY PLAYER INPUT
-  if (answer > nextSceneLen || answer < 0) {
-    showTextNode(textNode.id);
+  
+  // VARIABLE STORING OPTION LENGTHS
+  let optionsLength = textNode.options.length; 
+  
+  // ALLOWS ANY KEY INPUT TO START THE GAME
+  let nextText = 1;
+  if (textNodeIndex == 0) {
+    showTextNode(nextText);
   } else {
-    // INITIATE NEXT SCENE UPON CORRECT PLAYER INPUT
-    let nextScene = showTextNode(textNode.options[answer - 1].nextText);
+    
+    // CHECKS FOR CORRECT PLAYER INPUT:
+    // REPLAYS CURRENT SCENE UPON FAULTY INPUT
+    if (isNaN(answer) || answer > optionsLength || answer <= 0) {
+      console.log(clc.red(`\n\n\n                --x----x----x----x----x----x----x----x----x----x-- \n 
+      ~~> Faulty Input,  Try Again!! <~~\n
+      ~~> Enter One Of The Present Numbers <~~\n 
+      ~~> Only Numeric Input Allowed <~~\n
+      --x----x----x----x----x----x----x----x----x----x--\n\n\n`));
+      showTextNode(textNodeIndex);
+    } else {
+      
+      // INITIATES NEXT SCENE UPON CORRECT INPUT
+      nextText = textNode.options[answer - 1].nextText;
+      
+      // CLEARS CURRENT SCENE OFF THE WINDOW AFTER INPUT
+      console.clear();
+      showTextNode(nextText);
+    };
   }
-}
+};
+
+// VARIABLE STORING DATE 
+let date = new Date();
 
 // ALL SCENES AND OPTIONS
+// EVERY DEATH SCENE SHOULD TAKE YOU TO A SPECIAL PRE-DEATH DESCRIBING YOUR DEATH 
+// AND AFTERWARDS INITIATE DEATH
 const textNodes = [
+
   // SCENE - 00 - START
   {
     id: 0,
     text: `                      
-    \n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    ::::::::::::::                    ::::::::::::::\n    ::::::::::::::: THE EPIC JOURNEY :::::::::::::::\n    ::::::::::::::::  ~~~~~ OF ~~~  ::::::::::::::::\n    :::::::::::::::::   DRUNK GUY  :::::::::::::::::\n    ::::::::::::::::::     BOB    ::::::::::::::::::\n    ::::::::::::::::::::::    ::::::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::`,
+    \n       :::::::::::::    :::::  %%%%  ------------------------------  %%%%  :::::    ::::::::::::\n       ::::::::::::::      :::  %%%%  ○○○○○○○○○○○○○○○○○○○○○○○○○○○○  %%%%  :::      :::::::::::::\n       :::::::::::::::    :::::  %%%%  ○○○○------------------○○○○  %%%%  :::::    ::::::::::::::\n       ::::::::::::::::      :::  %%%%  ○○                    ○○  %%%%  :::      :::::::::::::::\n       ::::::::::::::::     :::::  %%%%  ○○ THE EPIC JOURNEY ○○  %%%%  :::::     :::::::::::::::\n       :::::::::::::::         :::  %%%%  ○○  ~~~~ OF ~~~~  ○○  %%%%  :::         ::::::::::::::\n       ::::::::::::::   ::    :::::  %%%%  ○○   DRUNK GUY  ○○  %%%%  :::::    ::   :::::::::::::\n       :::::::::::::   ::::      :::  %%%%  ○○     BOB    ○○  %%%%  :::      ::::   ::::::::::::\n       ::::::::::::   ::::::    :::::  %%%%  ○○○        ○○○  %%%%  :::::    ::::::   :::::::::::\n       :::::::::::   :::  :::      :::  %%%%  ○○○------○○○  %%%%  :::      :::  :::   ::::::::::\n       ::::::::::   :::    :::    :::::  %%%%  ○○○○○○○○○○  %%%%  :::::    :::    :::   :::::::::\n       :::::::::   :::      :::      :::  %%%%  --------  %%%%  :::      :::      :::   ::::::::`,
     options: [
       {
-        text: `\n\n  Press 1 to start game`,
-        nextText: 1,
-      },
-    ],
-  },
+        text: `\n\n   Press any ${clc.greenBright(`key`)} to start the game.`,
+        nextText: 1
+      }
+    ]
+},
 
-  // SCENE - 01
+
+
+  // SCENE - 01 - INTRO
   {
     id: 1,
-    text: `\nYou wake up in a tavern with a head-splitting headache. You're at a table. \nThe air is humid and stinks of a concoction of various bodily odors. \nYou are very thirsty. Luckily, there is a glass of water next to you.
-    \nWhat will you do? (Press a number to continue)`,
+    text: `\n\n   An einem Tisch in einer Taverne, wachst du auf. Dein Kopf dröhnt vor Schmerzen. Wo bist du?\n   Was ist passiert? Dir an den Kopf fassend, atmest du tief ein. Die Luft ist feucht, warm und\n   stinkt nach einer bittersüßlichen Mischung verschiedenster Körpergerüche. Deine Hand greift\n   nach deinem Mund, fast hättest du dich übergeben. Ein unerträglicher Durst erfasst dich. Wasser.\n   Du brauchst Wasser. Zum Glück steht ein Glas kristallklares, eiskaltes Wasser direkt vor dir.
+    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
 
     // SCENE - 01 - OPTIONS
     options: [
+
       //  OPTION - 01
       {
-        text: `\n    1. Pick up the glass of water and chug it down, you are dying of thirst!\n`,
+        text: `\n        1. Ohne nachzudenken nach dem Glas schnappen und es deinen gierigen, vertrockneten Schlund hinunter kippen!\n`,
 
-        // INITIATES: SCENE - 02
-        nextText: 2,
+        // INITIATES: PRE-DEATH - 02
+        nextText: 2
       },
 
       //  OPTION - 02
       {
-        text: "\n    2. Ignore the glass of water, who knows if it's really water, after all.\n       Look around and try to get your bearing straight.\n",
+        text: `\n        2. Ignoriere das Glas, wer weiß was diese durchsichtige Flüssigkeit wirklich ist? Du schaust dich um.\n`,
 
         // INITIATES: SCENE - 03
-        nextText: 3,
-      },
-    ],
-  },
+        nextText: 3
+      }
+    ]
+},
 
-  // SCENE - 02
+
+
+  // SCENE - 02 - PRE-DEATH: WASSER
   {
     id: 2,
-    text: `\nAhh a delicious glass of ice col... Wha.. what?! This isn't water! This is rum! \nPure rum! You die inside as the liquor burns its way down your esophagus. \nUh-oh, you feel your stomach churning in protest.\n`,
+    text: `\n   Ahh, ein süßes, die Kehle befeuchtendes, eiskaltes Glas Wass... Wa... Was? Das ist kein Wasser!\n   Das ist Rum! Purer Rum! Du stirbst innerlich als das dir der Alkohol den Hals hinunter brennt.\n   Uh-oh, du fühlst, wie sich dein Magen dreht und krümmt, fast so als würde es protestieren.\n`,
 
     // SCENE - 02 - OPTIONS
     options: [
       {
-        text: `You can't keep it in. Your eyes frantically look for a spot to let it all out, \nbut alas it's too late. A blubbering, gargling sound emits from your mouth as you \nvomit all over yourself and the table. You pass out.`,
+        text: clc.redBright(`\n        Du hälst es nicht mehr aus! Deine Augen suchen panisch nach einer Ecke, einem Eimer, irgendwas worin du dich\n        übergeben kannst, doch es ist zu spät. Ein blubberndes, gurgelndes Geräusch entfleucht deinen trockenen Lippen,\n        während dir dein Mageninhalt hochgeschossen kommt. Für einen kurzen Moment wirkst du, wie ein majestätischer\n        Vulkan, der sich in Lava ergießt. Tränend, rollen sich deine Augen nach hinten, du besudelst dich und den\n        unschuldigen Tisch mit deinem Erbrochenen.\n\n        Du verlierst dein Bewusstsein. Majestätisch sah das jetzt nicht aus...
+        `),
 
-        // INITIATES: DEATH SCENE
-        nextText: 10,
-      },
-    ],
-  },
+        // INITIATES: DEATH
+        nextText: 99
+      }
+    ]
+},
 
-  // SCENE - 03
+
+
+  // SCENE - 03 - TAVERNE
   {
     id: 3,
-    text: `\nYou are in a rather rowdy tavern. The loudness of the chatter and the music is \nalmost deafening to your sensitive ears. The air is humid and stinks of a \nconcoction of various bodily odors. The door is to your back. You need to leave this place.`,
+    text: `\n   Du befindest dich in einer dreckigen, heruntergekommenen Taverne. Um dich herum allerlei Menschen,\n   beschäftigt sich zu betrinken oder verwickelt in lautstarkem Suffgeschwätz. Dazu noch die\n   Lautstärke der Musik und dir ist sofort bewusst, woher die Kopfschmerzen kommen. Zumindest zum Teil,\n   schließlich hast du auch ordentlich einen im Tee, mein Bester.
+\n   Links hinter dir öffnet sich eine Tür und ein Mann tritt herein. Er nickt einigen Gästen zu\n   und wendet sich, seine Jacke aufknöpfend, dem Kleiderhaken zu.\n   Das muss der Ausgang sein, denkst du dir.
+\n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
 
     // SCENE - 03 - OPTIONS
     options: [
+
       //  OPTION - 01
       {
-        text: "\n    1. Rush for the door, jank it open and leave the tavern.\n",
+        text: "\n        1. Gehe zum Wirt und frage ihn, ob er weiß was mit dir passiert ist.\n",
 
         // INITIATES: SCENE - 04
-        nextText: 4,
+        nextText: 4
       },
 
       //  OPTION - 02
       {
-        text: "\n    2. Go to the bartender and inquire him about your situation.\n",
+        text: "\n        2. Warte bis der Mann sich von der Tür entfernt, pack' deine Habseligkeiten und fliehe sofort aus der Taverne!\n",
 
         // INITIATES: SCENE - 05
-        nextText: 5,
+        nextText: 5
       },
 
       //  OPTION - 03
       {
-        text: "\n    3. Stay in your seat and accept your fate.\n",
+        text: "\n        3. Das Glas Wasser flirtet dich die ganze Zeit schon an, du kannst der Versuchung nicht länger widerstehen! \n",
 
-        // INITIATES: DEATH SCENE
-        nextText: 2,
-      },
+        // INITIATES: PRE-DEATH - 02
+        nextText: 2
+      }
+    ]
+},
 
-      //  OPTION - 04
-      {
-        text: "\n    4. Change your mind and drink that glass of water. \n",
 
-        // INITIATES: SCENE - 02
-        nextText: 2,
-      },
-    ],
-  },
 
-  // SCENE - 04
+  // SCENE - 04 - WIRT
   {
     id: 4,
-    text: `\nThe streets are cold but the air is refreshing. \nYou take a deep breath and the cold air rushing through your lungs alleviates your drunkeness a bit. \nYou feel as if you can think more clearly now. Your blurry vision is also returning to normal.`,
+    text: `\n   Der Wirt nickt dir zu, als er dich am Tresen empfängt. Er wirft einen, kurzen, durchdringenden Blick\n   auf dich und schnauft. Ehe du dich versiehst, steht ein großer, durchsichtiger Krug vor dir. Du siehst\n   trockener aus, als meine Frau nachts im Bett, mein Freund, posaunt er laut und klopft dir dabei lachend\n   auf die Schulter. Das Wasser hier geht auf's Haus, lang zu bevor du mir hier noch umkippst, fügt er hinzu.\n   Bevor er zu Ende reden kann, hängst du mit deinen gierigen Lippen schon am Krug.\n\n   Erfrischend, kaltes Wasser fließt dir angenehm kühlend den Hals hinunter.\n   Was kann ich für dich tun Kleiner? Fragt er dich, erstaunt darüber, wie schnell du den Krug geleert hast.
+    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
+
+
 
     // SCENE - 04 - OPTIONS
     options: [
+
       //  OPTION - 01
       {
-        text: "\n    1. Go to Scene 5.\n",
+        text: "\n        1. Danke ihm und falle über den Krug her. Wasser, Wasser... An was anderes kannst du nicht mehr denken.\n",
+
+      // INITIATES: SCENE - 05
+        nextText: 5
+      },
+
+      //  OPTION - 02
+      {
+        text: "\n        2. Lehne sein Angebot dankend ab. Du hast dein eigenes Glas Wasser, vom Tisch an dem du eben noch warst, dabei. \n",
+
+        // INITIATES: PRE-DEATH - 02
+        nextText: 2
+      },
+
+      //  OPTION - 03
+      {
+        text: "\n        3. Greife nach seinem Kragen und ziehe ihn zu dir herunter:\n           Hör' zu Arschloch! Nochmal falle ich auf deine KO-Drinks nicht herein! \n",
+
+        // INITIATES: PRE-DEATH - 06
+        nextText: 6
+      },
+
+        //  OPTION - 04
+      {
+        text: "\n        4. Schau ihn leicht genervt an, dann den Krug. Wer weiß, was dir dieser Mann andrehen will.\n           Lehne sein Angebot dankend an und verlasse die Taverne. \n",
 
         // INITIATES: SCENE - 05
-        nextText: 5,
-      },
+        nextText: 5
+      }
+    ]
+},
 
-      //  OPTION - 02
-      {
-        text: "\n    2. Go to Scene 6.\n",
 
-        // INITIATES: SCENE - 06
-        nextText: 6,
-      },
 
-      //  OPTION - 03
-      {
-        text: "\n    3. Die.\n",
-
-        // INITIATES: DEATH SCENE
-        nextText: 2,
-      },
-
-      //  OPTION - 04
-      {
-        text: "\n    4. Go to Scene 7. \n",
-
-        // INITIATES: SCENE - 07
-        nextText: 7,
-      },
-    ],
-  },
-
-  // SCENE - 05
+  // SCENE - 05 - DRAUßEN
   {
-    id: 5,
-    text: `\nBla bla bla bla bla bla bla bla bla bla bla. \nAnd some more bla bla bla bla bla bla bla bla bla.`,
+  id: 5,
+  text: `\n   Du verlässt die Taverne und stehst auf einer offenen Straße. Es ist kalt. Saukalt. Die Art von alles\n   durchdringender Kälte, die selbst dein bestes Stück, wie einen verschrumpelten Pickel aussehen lässt.\n   Oder sah der schon vorher so aus? Hey, hey. Sorry. Ich bin zu weit gegangen, sei nicht traurig.\n   Auf die Größe kommt es schließlich nicht an, oder irgendwie sowas.\n\n   Eine Kutsche steht keine zehn Meter von dir entfernt und eine untersetzte Person auf dem\n   gegenüberliegenden Bordstein, die dich unverhohlen anstarrt.
+  \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
 
-    // SCENE - 05 - OPTIONS
-    options: [
-      //  OPTION - 01
-      {
-        text: "\n    1. Die.\n",
+  // SCENE - 05 - OPTIONS
+  options: [
 
-        // INITIATES: DEATH SCENE
-        nextText: 2,
-      },
+    //  OPTION - 01
+    {
+      text: "\n        1. Dich der Person zuwenden, die dich seltsam beäugelt und sie ansprechen.\n",
 
-      //  OPTION - 02
-      {
-        text: "\n    2. Do thing B.\n",
+    // INITIATES: SCENE - 10
+      nextText: 10
+    },
 
-        // INITIATES: SCENE - 06
-        nextText: 6,
-      },
+    //  OPTION - 02
+    {
+      text: "\n        2. Den Kutscher ansprechen. Es ist verdammt kalt und du willst schleunigst nach Haus!\n",
 
-      //  OPTION - 03
-      {
-        text: "\n    3. Die.\n",
+      // INITIATES: SCENE - 08
+      nextText: 8
+    },
 
-        // INITIATES: DEATH SCENE
-        nextText: 2,
-      },
+    //  OPTION - 03
+    {
+      text: "\n        3. Umfallen. Liegen bleiben. Scheißtag.\n",
+
+      // INITIATES: PRE-DEATH - 07
+      nextText: 7
+    },
 
       //  OPTION - 04
-      {
-        text: "\n    4. Do thing D. \n",
+    {
+      text: "\n        4. Gott anbeten!\n",
 
-        // INITIATES: SCENE - 07
-        nextText: 7,
-      },
-    ],
-  },
+      // INITIATES: SCENE - 13
+      nextText: 13
+    }
+  ]
+},
 
-  // SCENE - 06
+
+
+  // SCENE - 06 - PRE-DEATH: WIRT
   {
     id: 6,
-    text: `\nYadedadedadedadeadadeadadeeade Blabla this and that I am very ghey.`,
-
+    text: `\n   Mit einer Hand haut der Wirt laut auf den Tresen und mit der anderen greift er nach deiner Babyhand.\n   Spielen willst du, ja? Flüstert er dir berdrohlich zu, sich über dich beugend. Jetzt erst bemerkst du,\n   wie gewaltig groß der Wirt ist, deine Hand ist gar komplett in seiner Bärenpranse verschwunden.\n   Du stammelst unverständliches Zeug, ehe deine wirren Gedanken von einem stechenden Schmerz in deiner\n   Hand unterbrochen werden.`,
+  
     // SCENE - 06 - OPTIONS
     options: [
+  
       //  OPTION - 01
       {
-        text: "\n    1. Die.\n",
+        text: clc.redBright(`\n        Du schaust auf deine Hand. Deine Finger zeigen in unterschiedliche Richtungen. Du kannst dich\n        nicht erinnern, dass sie sich jemals hätten so drehen können. Der Wirt hat dir wohl einhändig\n        deine gesamte Hand zertrümmert. Viel Zeit mit den Schmerzen bleibt dir nicht, denn als nächstes\n        siehst du aus dem Augenwinkel eine gewaltige Faust, gleich einem allesvernichtenden Meteors,\n        auf dein Gesicht herunterdonnern.\n\n        Poof, dir gehen die Lichter aus. Was hast du Wicht dir nur dabei gedacht?
+        `),
+  
+        // INITIATES: DEATH
+        nextText: 99
+      }
+    ]
+},
 
-        // INITIATES: DEATH SCENE
-        nextText: 2,
-      },
 
-      //  OPTION - 02
-      {
-        text: "\n    2. Die.\n",
 
-        // INITIATES: DEATH SCENE
-        nextText: 2,
-      },
-
-      //  OPTION - 03
-      {
-        text: "\n    3. Die\n",
-
-        // INITIATES: DEATH SCENE
-        nextText: 2,
-      },
-
-      //  OPTION - 04
-      {
-        text: "\n    4. Do thing D. \n",
-
-        // INITIATES: SCENE - 07
-        nextText: 7,
-      },
-    ],
-  },
-
-  // SCENE - 07
+  // SCENE - 07 - PRE-DEATH: KÄLTE
   {
-    id: 7,
-    text: `\nYadedadedadedadeadadeadadeeade Blabla this and that I am very ghey.`,
+      id: 7,
+      text: `
+   Du rutschst auf einer gefrorenen Pfütze aus und landest flach auf dem Boden.
+   Du willst dich gerade hochraffen, da hälst du kurz still, denkst nach und nickst
+   dir selbst zu. Es scheint, als hättest du deine Entscheidung getroffen. Du bleibst liegen.`,
+    
+      // SCENE - 07 - OPTIONS
+      options: [
+    
+        //  OPTION - 01
+        {
+          text: clc.redBright(`        
+        
+        Die Kälte nimmt sich deiner sofort an. Sie siecht in deine Gliedmaßen ein, kriecht dein Torso
+        hoch und legt sich sanft über deine Brust. Ihr eisiger Griff jedoch, umklammert dein Herz.
+        Sie raubt dir den Schmerz, du fühlst nichts mehr, leise flüstert sie dich in den Schlaf.
 
-    // SCENE - 07 - OPTIONS
-    options: [
-      //  OPTION - 01
-      {
-        text: "\n    1. Go to Scene 6.\n",
+        Auch wenn sie grässlich klingt, so ist sie doch ein gnadenvoller Tod. Zufrieden schläfst
+        du ein, dein Gesicht bleich und blau. Aufwachen wirst du sicherlich nicht mehr.
+        `),
+    
+          // INITIATES: DEATH
+          nextText: 99
+        }
+      ]
+},
 
-        // INITIATES: DEATH SCENE
-        nextText: 6,
-      },
 
-      //  OPTION - 02
-      {
-        text: "\n    2. Die.\n",
 
-        // INITIATES: DEATH SCENE
-        nextText: 2,
-      },
+  // SCENE - 08 - KUTSCHER: ERSTES TREFFEN I
+  {
+      id: 8,
+      text: `
+   Der Kutscher schaut dich besorgt an. Ist Ihnen nicht kalt? Sie haben nicht einmal eine Jacke an.
+   Soll ich Sie irgendwohin fahren?
+   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
+    
+      // SCENE - 08 - OPTIONS
+      options: [
+    
+        //  OPTION - 01
+        {
+          text: `        
+        1. Ihm sagen, dass du keine Ahnung hast, wie du hier gelandet bist und nach Hause willst.
+        `,
+    
+        // INITIATES: SCENE - 09
+          nextText: 9
+        },
+    
+        //  OPTION - 02
+        {
+          text: `
+        2. Dich wieder von ihm abwenden. Die Person, die dich anstarrt ist doch interessanter.
+        `,
+    
+          // INITIATES: SCENE - 10
+          nextText: 10
+        },
+        
+        //  OPTION - 03
+        {
+          text: `
+        3. Eine transzendente Stimme flüstert dir zu. Dir wird ganz warm in der Brust.
+        `,
+    
+          // INITIATES: SCENE - 13
+          nextText: 13
+        }
+      ]
+},
 
-      //  OPTION - 03
-      {
-        text: "\n    3. Die.\n",
 
-        // INITIATES: DEATH SCENE
-        nextText: 2,
-      },
 
-      //  OPTION - 04
-      {
-        text: "\n    4. Die. \n",
+  // SCENE - 09 - KUTSCHER: ERSTES TREFFEN II
+  {
+      id: 9,
+      text: `
+   Hahaha, wollen wir das nicht alle? Lacht er dir zu und ergänzt: Ich kann Sie gerne nach Hause
+   fahren. Eine Fahrt innerhalb der Stadt, würde Sie ${clc.yellowBright(`10 Goldmünzen`)} kosten.
+   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
+    
+      // SCENE - 09 - OPTIONS
+      options: [
+    
+        //  OPTION - 01
+        {
+          text: `        
+        1. ${clc.yellowBright(`10 Goldmünzen`)}?! Sieht dieser Mann nicht, wie elend es dir geht? Du schnellst nach vorne um nach seiner Jacke zu greifen, fast blind vor Wut.
+        `,
+    
+          // INITIATES: PRE-DEATH - 07
+          nextText: 7
+        },
+    
+        //  OPTION - 02
+        {
+          text: `        
+        2. Den Kopf schütteln und sein Angebot ablehnen. Geld hast du keins. Vielleicht kann dir die untergesetzte Person weiterhelfen?
+           Schließlich starrt sie dich schon die ganze Zeit an.
+        `,
+    
+         // INITIATES: SCENE - 10
+         nextText: 10
+        },
 
-        // INITIATES: DEATH SCENE
-        nextText: 2,
-      },
-    ],
-  },
+        //  OPTION - 03
+        {
+          text: `
+        3. Eine transzendente Stimme flüstert dir zu. Die Stimme ist überwältigend...
+        `,
+    
+          // INITIATES: SCENE - 13
+          nextText: 13
+        }
+      ]
+},
 
-  // SCENE - 10 - DEATH
-  // EMPTY TEXT AND EMPTY OPTION TO AVOID "UNDEFINED" RETURNS
-  // GAME SHOULD REBOOT WHENEVER THIS SCENE IS READ.
+
+
+  // SCENE - 10 - PERSON: ERSTES TREFFEN I 
   {
     id: 10,
-    text: ``,
-    options: [{ text: `` }],
-  },
+    text: `
+   Leicht taumelnd, gehst du auf die Person zu. Sie mustert dich mit ihren Augen von oben bis unten ab.
+   Als du sie erreichst, raunt sie dir entgegen: Ich habe Leichen gesehen, die lebendiger aussehen als du.
+   Brauchst du Hilfe?
+   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
+   `,
+  
+    // SCENE - 10 - OPTIONS
+    options: [
+  
+      //  OPTION - 01
+      {
+        text: `        1. Nach Geld fragen.
+        `,
+  
+        // INITIATES: SCENE - 11
+        nextText: 11
+      },
+  
+      //  OPTION - 02
+      {
+        text: `        2. Nach dem aktuellen Datum fragen.
+        `,
+        
+        // INITIATES: SCENE - 12
+        nextText: 12
+      },
 
-  // SCENE - 11 - WRONG INPUT
+      // OPTION - 03
+      {
+        text: `        3. Die Person beleidigen: Deine Hässlichkeit brennt mir die Augen aus meinem Schädel!`,
+
+        // INITIATES: FIGHT
+        nextText: 666
+      }
+    ]
+},
+
+
+
+  // SCENE - 11 - PERSON: ERSTES TREFFEN II
   {
     id: 11,
-    text: `You've put in a wrong number. Try again!`,
-    options: [{ text: `` }],
+    text: `
+   Die Person schaut dich bemitleidenswert an. Du siehst auch so aus als bräuchtest du Geld, mein Lieber.
+   Hier hast du ${clc.yellowBright(`2 Goldmünzen`)}. Kauf dir damit was Warmes, ehe du noch erfrierst, ja?
+   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
+   `,
+  
+    // SCENE - 11 - OPTIONS
+    options: [
+  
+      //  OPTION - 01
+      {
+        text: `        1. Nach dem aktuellen Datum fragen.
+        `,
+  
+        // INITIATES: SCENE - 12
+        nextText: 12
+      },
+
+      // OPTION - 02
+      {
+        text: `        2. Die Person angreifen: Her mit deinem Geldbeutel, du dreckiger Geizkragen!
+        `,
+
+        // INITIATES: FIGHT
+        nextText: 666
+      }
+    ]
+},
+
+
+
+  // SCENE - 12 - PERSON: ERSTES TREFFEN III
+  {
+      id: 12,
+      text: `
+   Sie schaut dich kurz verwirrt an, dann schüttelt sie lächelnd den Kopf, wirft einen flüchtigen Blick
+   auf ihre futuristisch aussehende Armbanduhr und widmet sich dir wieder zu:
+
+   Es ist ${clc.blueBright(date)}, beep, boop.
+
+   Der Pfosten hat doch gerade Robotergeräusche von sich gegeben, oder?!
+   Und was war das bitte für eine Art dir das Datum zu nennen?!
+   
+   Deine maximale Verwirrung lässt du dir mit einem nervösen Nicken, nicht anmerken.
+   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
+   `,
+    
+      // SCENE - 12 - OPTIONS
+      options: [
+    
+        //  OPTION - 01
+        {
+          text: `        1. Ihr danken und dich von ihr abwenden. Du vernimmst ein transzendentes Flüstern: Bete mich an und ich helfe dir...
+          `,
+    
+          // INITIATES: SCENE - 13
+          nextText: 13
+        },
+  
+        // OPTION - 02
+        {
+          text: `        2. Die Person beleidigen: Meine Faust schickt dich gleich in's vergangene Jahrhundert, du Blechbirne!`,
+  
+          // INITIATES: FIGHT
+          nextText: 666
+        }
+      ]
+},
+
+
+
+  // SCENE - 13 - ENGEL 
+  {
+      id: 13,
+      text: `
+   Du kniest dich in der Kälte auf die Straße und fängst an zu beten. Wen auch immer
+   du versuchst zu erreichen, angesichts deiner Lage, würdest du jeden Gott nehmen.
+   Deine Hände zitternd zusammengefaltet, deine Arme schräg gen Luft gestreckt.
+   Deine Augen versunken vor Verzweiflung.
+
+   Für einen Moment passiert nichts.
+  
+   Dann trifft dich ein gleißendes Licht. Eine sonnenhelle Gestalt schwebt zu dir herab,
+   legt dir sanft die Hand auf die Schulter und erinnert dich daran, dass du den
+   ${clc.yellowBright(`Zettel mit der Adresse`)} in der Tasche hast.\n
+   Eine Fügung Gottes? Wer weiß, aber immerhin hast du jetzt einen Anhaltspunkt.
+   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)},
+   `,
+    
+      // SCENE - 11 - OPTIONS
+      options: [
+    
+        //  OPTION - 01
+        {
+          text: `        1. Zur Person von vorhin zurück gehen.
+          `,
+    
+        // INITIATES: SCENE - 15
+          nextText: 15
+        },
+    
+        //  OPTION - 02
+        {
+          text: `        2. Zum Kutscher gehen.
+          `,
+    
+          // INITIATES: SCENE - 14
+          nextText: 14
+        },
+
+        //  OPTION - 03
+        {
+          text: `        3. Zurück in die Taverne gehen. Du brauchst jetzt Alkohol. Ganz viel Alkohol!
+          `,
+    
+          // INITIATES: PRE-DEATH - 16
+          nextText: 16
+        }
+      ]
+},
+
+
+
+  // SCENE - 14 - KUTSCHER: NACH ENGEL I
+  {
+      id: 14,
+      text: `
+   Du gehst auf den Kutscher zu, der dich herablassend anschaut. Kein Wunder, nach deiner
+   aufmerksamkeiterregenden Aktion vorhin, würde dich selbst deine eigene Mutter herablassend anschauen.
+   Eine schöne Dame sitzt bereits in der Kutsche. Ihr Anlitz liebkost deine Äuglein, du Perversling.
+   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
+    
+      // SCENE - 14 - OPTIONS
+      options: [
+    
+        //  OPTION - 01
+        {
+          text: `        
+        1. Dem Kutscher sagen, dass du zu der Adresse auf dem Zettel willst.
+          `,
+    
+        // INITIATES: SCENE - 17
+          nextText: 17
+        },
+    
+        //  OPTION - 02
+        {
+          text: `        
+        2. Deine Meinung ändern und doch lieber zur untergesetzten Person von eben gehen.
+          `,
+    
+          // INITIATES: SCENE - 15
+          nextText: 15
+        },
+
+        //  OPTION - 03
+        {
+          text: `        
+        3. Sagen, dass du in die gleiche Richtung, wie die schöne Dame fährst. (Du Perversling.)
+          `,
+    
+          // INITIATES: PRE-DEATH - 20
+          nextText: 20
+        }
+      ]
+},
+
+
+
+  // SCENE 15 - PERSON: NACH ENGEL I
+  {
+        id: 15,
+        text: `
+   Die Person von eben steht nach wie vor am selben Ort und drückt gerade eine Zigarette aus, als du bei ihr ankommst.
+   Almosen hab ich keine mehr, falls du nach Geld fragen willst. Sagt sie dir im ruhigen Ton.
+   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
+   `,
+      
+        // SCENE - 15 - OPTIONS
+        options: [
+      
+          //  OPTION - 01
+          {
+            text: `        
+        1. Der untergesetzten Person nuschelnd die Adresse auf dem Zettel zeigen.
+            `,
+      
+          // INITIATES: SCENE - 18
+            nextText: 18
+          },
+      
+          //  OPTION - 02
+          {
+            text: `
+        2. Doch lieber zurück zum Kutscher gehen.
+            `,
+      
+            // INITIATES: SCENE - 14
+            nextText: 14
+          }
+        ]
+},
+
+
+
+  // SCENE - 16 - PRE-DEATH: TAVERNE NACH ENGEL
+  {
+    id: 16,
+    text: `
+   Kreidebleich stürzt du dich in die Taverne zurück. Was auch immer eben passiert ist, du willst nichts davon wahrhaben.
+   Du drückst die Menschen zur Seite und bahnst dir eine Schneise bis zum Tresen durch. Der Wirt hat dich längst gesehen
+   und wirft dir ein schiefes Grinsen zu. 'Was darf's sein Bursche?', fragt er dich höhnisch.
+   
+   'Das stärkste Zeug, was du hast alter Mann!', zischst du zurück. Es scheint als hättest du dich für ein
+   One-Way Ticket entschieden.
+   `,
+  
+    // SCENE - 16 - OPTIONS
+    options: [
+  
+      //  OPTION - 01
+      {
+        text: clc.redBright(`     
+        Der Wirt schnauft und stellt dir eine gewaltige Flasche puren Spiritus hin. Determiniert greifst du nach der Flasche und trinkst diese
+        auf der Stelle aus. Das unerträgliche Brennen des Alkohols im Rachen interessiert dich genauso wenig, wie der Preis für so eine große Flasche.
+        
+        Du grinst den Wirt, der dich nun fassungslos anstarrt, dumm an, hebst den Mittelfinger hoch und streckst sie ihm entgegen, während dein
+        Bewusstsein sich von dir verabschiedet.
+        
+        Bezahlen wirst du nichts mehr.
+        `),
+  
+        // INITIATES: DEATH
+        nextText: 99
+      }
+    ]
+},
+
+
+
+  // SCENE - 17 - KUTSCHER: NACH ENGEL II
+  {
+    id: 17,
+    text: `
+   Der Kutscher schaut sich den Zettel mit Bedacht an. Das ist machbar, sagt er, jedoch kostet Sie eine Fahrt
+   innerhalb der Stadt immernoch ${clc.yellowBright(`10 Goldmünzen`)}, mein Herr.
+ \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
+  
+    // SCENE - 14 - OPTIONS
+    options: [
+  
+      //  OPTION - 01
+      {
+        text: `        
+      1. Deine ${clc.yellowBright(`Goldmünzen`)} reichen vorne und hinten nicht. Zeig den Zettel lieber der Person von eben. 
+        `,
+  
+      // INITIATES: SCENE - 18
+        nextText: 18
+      },
+  
+      //  OPTION - 02
+      {
+        text: `        
+      2. Die Dame in der Kutsche anflirten. (War ja klar du Perversling.)
+        `,
+
+        // INITIATES: PRE-DEATH - 20
+        nextText: 20
+      }
+    ]
+},
+
+
+
+  // SCENE 18 - PERSON: NACH ENGEL II
+  {
+    id: 18,
+    text: `
+   Die Person von eben steht nach wie vor am selben Ort und drückt gerade eine Zigarette aus, als du bei ihr ankommst.
+   Almosen hab ich keine mehr, falls du nach Geld fragen willst. Sagt sie dir im ruhigen Ton.
+\n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
+`,
+  
+    // SCENE - 18 - OPTIONS
+    options: [
+  
+      //  OPTION - 01
+      {
+        text: `        
+        1. Der untergesetzten Person nuschelnd die Adresse auf dem Zettel zeigen.
+        `,
+  
+      // INITIATES: SCENE - 19
+        nextText: 19
+      },
+  
+      //  OPTION - 02
+      {
+        text: `
+        2. Doch lieber zurück zum Kutscher gehen.
+        `,
+  
+        // INITIATES: SCENE - 14
+        nextText: 14
+      }
+    ]
+},
+
+
+
+  // SCENE 19 - PERSON: NACH ENGEL III
+  {
+    id: 19,
+    text: `
+   Du holst den zerknüllten Zettel aus deiner Hosentasche und hältst ihn vor das Gesicht deines Gegenübers.
+   Da will ich hin, bringst du noch hervor, Weißt du wo das ist?
+
+   Die Person nimmt dir den Zettel aus der Hand und liest ihn vorsichtig durch. Ihre Augen leuchten auf.
+   Sie gibt dir den Zettel zurück und sagt:
+    
+       'Das ist keine fünf Minuten von hier, du erkennst es an einer Bäckerei im Erdgeschoss.'
+
+   Danach beschreibt sie dir, wo du lang musst.
+   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
+`,
+  
+    // SCENE - 19 - OPTIONS
+    options: [
+  
+      //  OPTION - 01
+      {
+        text: `        
+        1. Den Anweisungen der Person folgen und dich auf den Weg zur Bäckerei machen.
+        `,
+  
+      // INITIATES: SCENE - 21
+        nextText: 21
+      },
+  
+      //  OPTION - 02
+      {
+        text: `
+        2. Doch lieber zurück zum Kutscher gehen. (Kann da einer etwa die hübsche Dame nicht vergessen?)
+        `,
+  
+        // INITIATES: SCENE - 14
+        nextText: 14
+      }
+    ]
+},
+
+
+
+  // SCENE - 20 - PRE-DEATH: DAME IN DER KUTSCHE
+  {
+    id: 20,
+    text: `
+   Du torkelst zur Kutsche und lehnst dich an: Na du süße Maus, darf man dir Gesellschaft leisten?
+   Fragst du sie und wirfst ihr einen, in deiner Sicht, heißen, einladenden Blick zu.
+   
+   Danach versuchst du Strolch dich zu ihr in die Kutsche zu setzen.
+
+   Sie, jedoch findet deinen Blick alles andere als "einladend", und dass du unaufgefordert die Kutsche
+   betreten willst, findet der Kutscher genauso wenig amüsant.
+   `,
+  
+    // SCENE - 20 - OPTIONS
+    options: [
+  
+      //  OPTION - 01
+      {
+        text: clc.redBright(`     
+        ${clc.red("BANG !!")}
+
+        Ein lauter Knall lässt dir fast das Trommelfell platzen. Verwirrt schaust du zum Kutscher. Er sitzt immernoch in der Kutsche.
+        Plötzlich geben deine Beine nach, ein stechender Schmerz in deiner Brust macht sich bemerkbar. Dein Blick schießt wieder zur
+        Dame zurück und da dämmert's dir. Erschossen hat sie dich.
+
+        Den funkelnden Pistolenlauf erkennst du noch, da schwindet dir bereits das Bewusstsein.
+        "Widerlicher Mistkerl.", hörst du sie noch spotten, dann brichst du zusammen.
+
+        Deine Lichter gehen aus und die Welt ist einen Perversling leichter.
+        Was hast du hoffnungsloser Jammerlappen auch erwartet?
+        `),
+  
+        // INITIATES: DEATH
+        nextText: 99
+      }
+    ]
+},
+
+
+
+  // SCENE 21 - BÄCKEREI I
+  {
+    id: 21,
+    text: `
+   Du betrittst die Bäckerei. Sie befindet sich an einer Seitenstraße, die zu heruntergekommenen Wohnblocks führt.
+   Viel ist in der Bäckerei nicht los. Am hintersten Tisch gönnt sich jemand eine heiße Tasse Kaffee. Links von dir
+   vernascht einer gleich drei Bienenstiche aufeinmal. 'Oha, was ein geskillter Dude', denkst du dir noch, da
+   begrüßt dich auch schon die Bedienung:
+
+        'Na? Schon wieder zu viel gesoffen, was?' 
+   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
+`,
+  
+    // SCENE - 21 - OPTIONS
+    options: [
+  
+      //  OPTION - 01
+      {
+        text: `        
+        1. Woher kennt dich die Trulla?! Frage sie, was sie über dich weiß.
+        `,
+  
+      // INITIATES: SCENE - 22
+        nextText: 22
+      },
+  
+      //  OPTION - 02
+      {
+        text: `
+        2. Verlasse sofort die Bäckerei, das wird dir alles zu viel!
+        `,
+  
+        // INITIATES: PRE-DEATH - 07
+        nextText: 7
+      },
+
+      //  OPTION - 03
+      {
+        text: `
+        3. 'Wohl nicht genug, du bist immernoch hässlich!', eschauffierst du dich
+            und begibst dich schnurstracks zur Taverne zurück.
+        `,
+  
+        // INITIATES: PRE-DEATH - 16
+        nextText: 16
+      }
+    ]
+},
+
+
+
+  // SCENE - 22 - BÄCKEREI II
+  {
+    id: 22,
+    text: `
+   Sie überreicht dir einen ${clc.greenBright("Schlüsselbund")}, danach erklärt sie dir, dass du gleich über der Bäckerei wohnst und ihr
+   jedes Wochenende deine Schlüssel anvertraust, bevor du in die Taverne nebenan gehst. Sie hält dir eine deftige
+   Standpauke, und da dämmert's dir so langsam, langsam.
+
+   Du beziehst nämlich seit Jahren schon eine kleine Wohnung im Obergeschoss dieser Bäckerei.
+   Und sie begrüßt du jeden Morgen, wenn du dich auf den Weg zur Arbeit machst.
+   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
+   `,
+  
+    // SCENE - 22 - OPTIONS
+    options: [
+  
+      //  OPTION - 01
+      {
+        text: `        
+        1. Alles dreht sich, du hast Kreislauf! Flüchte nach draußen an die kalte, frische Luft!!
+        `,
+  
+      // INITIATES: PRE-DEATH - 07
+        nextText: 07
+      },
+  
+      //  OPTION - 02
+      {
+        text: `
+        2. Nichts macht mehr Sinn! Du verlässt die Bäckerei und rennst zur Taverne zurück.
+        `,
+  
+        // INITIATES: PRE-DEATH - 16
+        nextText: 16
+      },
+
+      // OPTION - 03
+      {
+        text: `
+        3. Danke ihr herzlichst und eile zur Treppe hinter'm Tresen, die hoch zu deine Wohnung führt. 
+        `,
+
+        // INITIATES: SCENE - 23
+        nextText: 23
+      }
+    ]
+},
+
+
+
+  // SCENE - 23 - WOHNUNG
+  {
+    id: 23,
+    text: `
+   Du betrittst deine Wohnung. Ein fauler Gestank beißt sich an deiner Nase fest. Es haut dich fast um, so schwül
+   und dick ist die abgestandene Luft. Es ist zu dunkel, du kannst nichts sehen.
+   
+   Gerade willst du eine Kerze anzünden, da springt dich etwas aus der Dunkelheit heraus an!
+   \n${clc.magentaBright(`   Eine enorme Präsenz erscheint vor dir!`)}
+   `,
+  
+    // SCENE - 23 - OPTIONS
+    options: [
+  
+      //  OPTION - 01
+      {
+        text: `        
+        1. Reiß' deine Arme hoch und stürz' dich in den Kampf! 
+        `,
+
+        // INITIATES: BOSS FIGHT
+        nextText: 667
+      }
+    ]
+},
+
+
+
+
+
+
+
+
+
+// SCENE - 99 - DEATH
+// EMPTY TEXT AND EMPTY OPTION TO AVOID "UNDEFINED" RETURNS
+// GAME SHOULD REBOOT WHENEVER THIS SCENE IS READ
+  {
+    id: 99,
+    text: ``,
+    options: [{text: ``}]
   },
-];
+]
+
+
 
 // INITIATE GAME
 startGame();
-
-// EVERY DEATH SCENE SHOULD TAKE YOU TO A SPECIAL SCENE DESCRIBING YOUR DEATH
-// AND AFTERWARDS INITIATE DEATH SCENE
-
-// IGNORE
-// readLineSync.keyInSelect example:
-/* animals = ['Lion', 'Elephant', 'Crocodile', 'Giraffe', 'Hippo'],
-index = readlineSync.keyInSelect(animals, 'Which animal?');
-console.log('Ok, ' + animals[index] + ' goes to your room.'); */
