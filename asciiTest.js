@@ -57,6 +57,21 @@ class Character {
       }
     });
   }
+  printCertificate() {
+    return figlet.text(
+      `  Hay  ${char.name} \n   Du hast \n gewonnen`,
+      {
+        font: "Ghost",
+        horizontalLayout: "default",
+        verticalLayout: "default",
+        width: 150,
+        whitespaceBreak: true,
+      },
+      function (err, data) {
+        console.log(data);
+      }
+    );
+  }
   decrementInventory(name, num) {
     this.inventory.forEach((obj) => {
       if (obj.name == name) {
@@ -64,22 +79,6 @@ class Character {
       }
     });
   }
-}
-/** function prints endscreen of game */
-function printCertificate() {
-  return figlet.text(
-    `  Hay  ${char.name} \n   Du hast \n gewonnen`,
-    {
-      font: "Ghost",
-      horizontalLayout: "default",
-      verticalLayout: "default",
-      width: 150,
-      whitespaceBreak: true,
-    },
-    function (err, data) {
-      console.log(data);
-    }
-  );
 }
 
 /** shows life of the contestants in each round */
@@ -322,7 +321,7 @@ function showTextNode(textNodeIndex) {
     readlineSync.question("Taste drücken um fortzufahren");
     console.log("1337 schleife");
 
-    printCertificate();
+    console.log(char.printCertificate());
     // reboot();
   }
 
@@ -359,3 +358,4 @@ const textNodes = [
 ];
 
 startGame();
+// console.log(char.printCertificate("Ali"));
