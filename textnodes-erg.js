@@ -141,3 +141,63 @@
 //         text: "\n2. Sich wenden und die Kutsche ansprechen\n",
 //         nextText: 6,
 //       }]}
+
+
+////// F_______________________ight Scenes
+// Node 12 FIGHT SCENE Enemy 1
+{
+  id: 12,
+  text: "\n:::::: Sie brüllt:'Dir bring ich manieren bei!' und erhebt ihre Fäuste zum Kampf. :::::: \n",
+  options: [{ text: "", nextText: 666 }],
+},
+
+//Node 10001 After Battle with Enemy 1
+{
+  id: 10001,
+  text: `\nDu blickst dich auf der Straße um.\nVor dir liegt ${enemyOne.name} und atmet schwer.\nDer Kutscher starrt dich irritiert an, du hörst wie Fensterläden geschlossen werden.\nDu bemerkst ein Straßenschild: 'F. - Eusch - Allee'. Das ist der Name der auf deinem Zettel steht!.\n
+  Was willst du tun?\n`,
+  options: [
+    {
+      text: "\n1. Den Kutscher ansprechen.\n",
+      nextText: 9, // Kutscher Node einfügen,
+    },
+    {
+      text: "\n2. Dem Straßenverlauf folgen und die Adresse suchen.\n",
+      nextText: 11, // Bäckerei Node einfügen
+    },
+    {
+      text: "\n3. Zurück in die Kneipe gehen.\n",
+      nextText: 10002,
+    },
+  ],
+},
+// node 10002 / zurück zu Kneipe - GameOver
+{
+  id: 10002,
+  text: `Du gehst zurück in die Kneipe, setzte dich an den Tresen und bestellst Vodka.`,
+  options: [
+    {
+      text: "\nEine ganze Flasche",
+      nextText: 10,
+    },
+  ],
+},
+
+// node 10003 for BOSS FIGHT
+{
+  id: 10003,
+  text: "\n:::::: Chaos wirft sich dir mit aller Kraft entgegen, als du versuchst, dir einen Weg durch die Wohnung zu bahnen. Ihr müsst kämpfen! :::::: \n",
+  options: [{ text: "", nextText: 667 }],
+},
+
+// node 10004 AFTER BOSS FIGHT
+{
+  id: 10004,
+  text: `\n Du fühlst dich ausgezehrt von dem langen Kampf. Die Mittagssonne scheint durch deine geputzten Fenster herein und die in der Luft tanzenden Staubflocken malen Schattenspiele an die Wände. Es ist vorbei. Du hast gewonnen! Zufrieden sinkst du in dein Bett und schließt die Augen.\n`,
+  options: [
+    {
+      text: "",
+      nextText: 1337,
+    },
+  ],
+}

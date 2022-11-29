@@ -12,7 +12,7 @@ console.log(test);
 
 function loot() {
   let belohnungsPacket = [5, 7, 15, 20];
-  let stufe = Math.floor(Math.random() * 3);
+  let stufe = Math.floor(Math.random() * 4);
   let bonus = belohnungsPacket[stufe];
   test.inventory.forEach((obj) => {
     if (obj.name == "Gold") {

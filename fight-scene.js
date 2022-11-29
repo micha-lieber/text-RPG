@@ -1,3 +1,4 @@
+var figlet = require("figlet");
 let readlineSync = require("readline-sync");
 
 /**Default attacks*/
@@ -17,7 +18,7 @@ const enemyOne = {
 /** BOSS enemy */
 const boss = {
   name: "Chaooos",
-  life: 999,
+  life: 200,
   attacks: [
     { name: "Du stolperst über einen Stapel Bücher!", damage: 20 },
     {
@@ -45,13 +46,7 @@ class Character {
     ];
     this.attacks = attacksArr;
   }
-  printCertificate() {
-    let certificate = `You are ${this.name} won the competition and deserve to receive this certificate
-                           
-    
-    `;
-    return certificate;
-  }
+
   printInventory() {
     return `You have \n ${this.inventory[0].content} pcs ${this.inventory[0].name}\n ${this.inventory[2].content} pcs ${this.inventory[2].name}`;
   }
@@ -70,6 +65,22 @@ class Character {
     });
   }
 }
+/** function prints endscreen of game */
+function printCertificate() {
+  return figlet.text(
+    `  Hay  ${char.name} \n   Du hast \n gewonnen`,
+    {
+      font: "Ghost",
+      horizontalLayout: "default",
+      verticalLayout: "default",
+      width: 150,
+      whitespaceBreak: true,
+    },
+    function (err, data) {
+      console.log(data);
+    }
+  );
+}
 
 /** shows life of the contestants in each round */
 function fight_status(enemy) {
@@ -80,7 +91,6 @@ function fight_status(enemy) {
 
 /** gibt die Belohnung nach dem Kampf aus */
 function loot() {
-  console.log("LOOOOOOT");
   let belohnungsPacket = [2, 4, 8, 10];
   let stufe = Math.floor(Math.random() * 4);
   let bonus = belohnungsPacket[stufe];
@@ -91,8 +101,7 @@ function loot() {
       return obj;
     }
   });
-  console.log(`Du hast ${bonus} Goldstücke gefunden!`);
-  console.log(char.inventory);
+  console.log(`Du hast ${bonus} Goldstücke bei deinem Gegner gefunden!`);
 }
 
 /**Default character */
@@ -105,7 +114,11 @@ function fight(enemy) {
       `Was willst du tun? (0 = Ohrfeige, 1 = Faustschlag, 2 = Tritt gegen das Knie, 3 = warten)\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n`
     );
 
-    if (answer < 3) {
+    if (!answer) {
+      console.log(
+        `Du hebst eine Hand mit Handfläche zu deinem Gegner um zu signalisieren, dass du eine Pause brauchst. Zu deiner Überraschung lässt ${enemy.name} von dir ab. Dann passiert es. Du lehnst dich vor und übergibst dich ausgiebig auf dem Bürgersteig.`
+      );
+    } else if (answer < 3) {
       console.log(
         `Du greifst ${enemy.name} mit ${char.attacks[answer].name} an und verursachst ${char.attacks[answer].damage} Schaden.\n`
       );
@@ -113,19 +126,21 @@ function fight(enemy) {
 
       // enemy dead
       if (enemy.life < 1) {
+        console.clear();
         console.log(
           `\n${enemy.name} geht zu Boden. Adrenalin rauscht durch deinen Körper. Es ist vorbei. Du hast gewonnen!\n`
         );
         loot();
-        break;
-        // hier kommt RETURN TRUE
+        return true;
       }
     } else if (answer >= 3) {
       console.log(
         "Du tust nichts. 'Halte die andere Wange hin', haben sie gesagt.\n"
       );
     } else {
-      console.log(`Glückwunsch, du hast das Spiel zerstört!`);
+      console.log(
+        `Du hebst eine Hand mit Handfläche zu deinem Gegner um zu signalisieren, dass du eine Pause brauchst. Zu deiner Überraschung lässt ${enemy.name} von dir ab. Dann passiert es. Du lehnst dich vor und übergibst dich ausgiebig auf dem Bürgersteig.`
+      );
     }
     // enemy attack
     let enemyAttack = Math.floor(Math.random() * enemy.attacks.length);
@@ -143,14 +158,27 @@ function fight(enemy) {
       console.log(
         `Du spürst wie dein Körper auf den harten Boden der Realität aufschlägt. Du schließt deine Augen. Erstmal 'ne Pause. GameOver.`
       );
-      reboot();
-      break;
-      //// MUSS HIER NOCH RETURN FALSE?
+
+      return false;
     }
 
     fight_status(enemy);
     readlineSync.question(`Taste drücken um fortzufahren`);
     console.clear();
+  }
+}
+/** restarts the game after gameOver */
+function reboot() {
+  let reboot = readlineSync.question(
+    `--------------\n Spiel erneut starten? (y = ja, n = nein)------------------\n`
+  );
+  if (reboot == "y") {
+    console.clear();
+    reset();
+    startGame();
+  } else {
+    console.clear();
+    console.log("Tschüssikowski!");
   }
 }
 
@@ -183,38 +211,34 @@ function fightBoss(boss) {
     // player attack
     let answer = Number(
       readlineSync.question(
-        `Was willst du tun? (0 = Aufräumen 1 = Um Hilfe rufen, 2 = Alles rauswerfen, 3 = Beten , 4 = Gehen)\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n`
+        `Was willst du tun? (1 = Aufräumen 2 = Um Hilfe rufen, 3 = Alles rauswerfen, 4 = Beten , 5 = Gehen)\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n`
       )
     );
 
-    if (answer < char.attacks.length - 2) {
+    if (!answer) {
       console.log(
-        `\n${char.attacks[answer].name} - ${char.attacks[answer].damage} Schaden.\n`
+        "Du versuchst die Wände hochzuklettern und deine Wohnung buchstäblich auf den Kopf zu stellen. Denn an der Decke siehst du kein Chaos. Du musst feststellen, dass deine Füße und Hände nicht an der Wand kleben und schlägst steinhart auf deinem Fußboden auf."
       );
-      boss.life -= char.attacks[answer].damage;
+    } else if (answer < char.attacks.length - 1) {
+      console.log(
+        `\n${char.attacks[answer - 1].name} - ${
+          char.attacks[answer - 1].damage
+        } Schaden.\n`
+      );
+      boss.life -= char.attacks[answer - 1].damage;
 
       // BOSS enemy dead
       if (boss.life < 1) {
-        console.log(
-          `\n${boss.name} ist besiegt. Du fühlst dich ausgezehrt von dem langen Kampf. Die Mittagssonne scheint durch deine geputzten Fenster herein und die in der Luft tanzenden Staubflocken malen Schattenspiele an die Wände. Es ist vorbei. Du hast gewonnen! Zufrieden sinkst du in dein Bett und schließt die Augen.\n`
-        );
-        reboot();
-        break;
-        // RETURN TRUE UM WEITERZUMACHEN?
+        console.log(`\n${boss.name} ist besiegt.\n`);
+        return true;
       }
-    } else if (answer == 3) {
-      console.log(`\n${char.attacks[answer].name}\n`);
-    } else if (answer == 4) {
+    } else if (answer - 1 === 3) {
+      console.log(`\n${char.attacks[answer - 1].name}\n`);
+    } else if (answer - 1 === 4) {
       console.clear();
-      console.log(`\n${char.attacks[answer].name}\n`);
-      reboot();
-      break;
-    } else {
-      console.log(
-        `\n Du tust nichts. Es ist sinnlos. Du patschst durch das Wasser auf deinem Küchenboden, machst dir ein Müsli und legst dich zu den Chips von gestern Abend ins Bett.`
-      );
-      reboot();
-      break;
+      console.log(`\n${char.attacks[answer - 1].name}\n`);
+
+      return false;
     }
     // BOSS enemy attack
 
@@ -228,16 +252,15 @@ function fightBoss(boss) {
 
     // player dead
 
-    if (test.life < 1) {
+    if (char.life < 1) {
       console.clear();
       console.log(
         `Du versinkst im Chaos. Es verschlingt dich und deine nächsten Wochen, während du versuchst dich zu sortieren. Game Over`
       );
-      reboot(enemy, test);
-      break;
+      return false;
     }
 
-    fight_status(enemy);
+    fight_status(boss);
   }
 }
 
@@ -249,7 +272,12 @@ function startGame() {
 // TEXTNODE => AN ENTIRE SCENE
 let textNode;
 
-function resetHealth() {
+/**function resets life and inventory to start fresh */
+function reset() {
+  char.inventory = [
+    { name: "zettel", content: "eine liederlich geschriebene Adresse" },
+    { name: "Gold", content: 0 },
+  ];
   enemyOne.life = 100;
   char.life = 100;
   boss.life = 999;
@@ -271,12 +299,32 @@ function showTextNode(textNodeIndex) {
     // console.clear() => ERROR, FIX LATER
 
     // REBOOT GAME AFTER PLAYER MADE BAD CHOICE
-    resetHealth();
+    reset();
     startGame();
   }
   if (textNode.options[0].nextText === 666) {
-    fight(enemyOne);
-    showTextNode(10001);
+    let y = fight(enemyOne);
+    if (y) {
+      showTextNode(10001);
+    } else {
+      reboot();
+    }
+  }
+  if (textNode.options[0].nextText === 667) {
+    let x = fightBoss(boss);
+    if (x) {
+      showTextNode(10004);
+    } else {
+      reboot();
+    }
+  }
+
+  if (textNode.options[0].nextText === 1337) {
+    readlineSync.question("Taste drücken um fortzufahren");
+    console.log("1337 schleife");
+
+    printCertificate();
+    // reboot();
   }
 
   // ASK PLAYER TO CHOOSE FROM MAX 4 OPTIONS
@@ -328,10 +376,10 @@ const textNodes = [
 
       //  OPTION - 02
       {
-        text: "\n    2. Ignore the glass of water, who knows if it's really water, after all.\n       Look around and try to get your bearing straight.\n",
+        text: "\n    2. go to bossfight.\n",
 
         // INITIATES: SCENE - 03
-        nextText: 3,
+        nextText: 10003,
       },
     ],
   },
@@ -362,17 +410,17 @@ const textNodes = [
     ],
   },
 
-  // FIGHT SCENE Enemy 1
+  // Node 12 FIGHT SCENE Enemy 1
   {
     id: 12,
     text: "\n:::::: Sie brüllt:'Dir bring ich manieren bei!' und erhebt ihre Fäuste zum Kampf. :::::: \n",
     options: [{ text: "", nextText: 666 }],
   },
 
-  // After Battle with Enemy 1
+  //Node 10001 After Battle with Enemy 1
   {
     id: 10001,
-    text: `\nDu blickst dich auf der Straße um.\nVor dir liegt ${enemyOne.name} und atmet schwer.\nDer Kutscher starrt dich irritiert an, du hörst wie Fensterläden geschlossen werden.\nDu bemerkst ein Straßenschild: 'F. - E. - Allee'. Das ist der Name der auf deinem Zettel steht!.\n
+    text: `\nDu blickst dich auf der Straße um.\nVor dir liegt ${enemyOne.name} und atmet schwer.\nDer Kutscher starrt dich irritiert an, du hörst wie Fensterläden geschlossen werden.\nDu bemerkst ein Straßenschild: 'F. - Eusch - Allee'. Das ist der Name der auf deinem Zettel steht!.\n
     Was willst du tun?\n`,
     options: [
       {
@@ -385,46 +433,37 @@ const textNodes = [
       },
       {
         text: "\n3. Zurück in die Kneipe gehen.\n",
-        nextText: 9999,
+        nextText: 10002,
       },
     ],
   },
-  // node 9999 / zurück zu Kneipe - GameOver
+  // node 10002 / zurück zu Kneipe - GameOver
   {
-    id: 9999,
+    id: 10002,
     text: `Du gehst zurück in die Kneipe, setzte dich an den Tresen und bestellst Vodka.`,
     options: [
       {
         text: "\nEine ganze Flasche",
-        nextText: 10, // Kutscher Node einfügen,
+        nextText: 10,
       },
     ],
   },
 
-  // node for BOSS FIGHT. REWRITE
+  // node 10003 for BOSS FIGHT
   {
-    id: 12,
-    text: "\n:::::: Sie brüllt:'Dir bring ich manieren bei!' und erhebt ihre Fäuste zum Kampf. :::::: \n",
-    options: [{ text: "", nextText: 666 }],
+    id: 10003,
+    text: "\n:::::: Chaos wirft sich dir mit aller Kraft entgegen, als du versuchst, dir einen Weg durch die Wohnung zu bahnen. Ihr müsst kämpfen! :::::: \n",
+    options: [{ text: "", nextText: 667 }],
   },
 
-  // node AFTER BOSS FIGHT REWRITE
+  // node 10004 AFTER BOSS FIGHT
   {
-    id: 10001,
-    text: `\nDu blickst dich auf der Straße um.\nVor dir liegt ${enemyOne.name} und atmet schwer.\nDer Kutscher starrt dich irritiert an, du hörst wie Fensterläden geschlossen werden.\nDu bemerkst ein Straßenschild: 'F. - E. - Allee'. Das ist der Name der auf deinem Zettel steht!.\n
-    Was willst du tun?\n`,
+    id: 10004,
+    text: `\n Du fühlst dich ausgezehrt von dem langen Kampf. Die Mittagssonne scheint durch deine geputzten Fenster herein und die in der Luft tanzenden Staubflocken malen Schattenspiele an die Wände. Es ist vorbei. Du hast gewonnen! Zufrieden sinkst du in dein Bett und schließt die Augen.\n`,
     options: [
       {
         text: "",
-        nextText: 
-      },
-      {
-        text: "",
-        nextText: 
-      },
-      {
-        text: "",
-        nextText: 
+        nextText: 1337,
       },
     ],
   },
