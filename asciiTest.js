@@ -35,6 +35,7 @@ const boss = {
     },
   ],
 };
+
 class Character {
   // this is the class constructor for character creation
   constructor(fighterName) {
@@ -56,21 +57,6 @@ class Character {
         obj.content += num;
       }
     });
-  }
-  printCertificate() {
-    return figlet.text(
-      `  Hay  ${char.name} \n   Du hast \n gewonnen`,
-      {
-        font: "Ghost",
-        horizontalLayout: "default",
-        verticalLayout: "default",
-        width: 150,
-        whitespaceBreak: true,
-      },
-      function (err, data) {
-        console.log(data);
-      }
-    );
   }
   decrementInventory(name, num) {
     this.inventory.forEach((obj) => {
@@ -104,7 +90,7 @@ function loot() {
 }
 
 /**Default character */
-const char = new Character("test");
+var char = new Character("test");
 
 function fight(enemy) {
   while (enemy.life > 0 && char.life > 0) {
@@ -265,6 +251,7 @@ function fightBoss(boss) {
 
 function startGame() {
   // GAME ALWAYS STARTS WITH SCENE 1
+
   showTextNode(0);
 }
 
@@ -281,7 +268,14 @@ function reset() {
   boss.life = 999;
 }
 
+Character.prototype.printCertificate = function () {
+  return `
+  \n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    :::::::::::::::::    Hey Du   ::::::::::::::::::\n    :::::::::::: gewinnen diese Abenteuer ::::::::::\n    ::::::::::::::::  ~~~~~ im ~~~  ::::::::::::::::\n    :::::::::::::::::   DRUNK GUY  :::::::::::::::::\n    ::::::::::::::::::     BOB    ::::::::::::::::::\n    ::::::::::::::::::::::    ::::::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::`;
+};
+
 function showTextNode(textNodeIndex) {
+  var figlet = require("figlet");
+
   // FIND SCENE BY ID AND LOG ITS TEXT FIRST
   textNode = textNodes.find((textNode) => textNode.id === textNodeIndex);
   console.log(textNode.text);
@@ -297,6 +291,7 @@ function showTextNode(textNodeIndex) {
     // console.clear() => ERROR, FIX LATER
 
     // REBOOT GAME AFTER PLAYER MADE BAD CHOICE
+
     reset();
     startGame();
   }
@@ -319,9 +314,7 @@ function showTextNode(textNodeIndex) {
 
   if (textNode.options[0].nextText === 1) {
     readlineSync.question("Taste drücken um fortzufahren");
-    console.log("1337 schleife");
-
-    console.log(char.printCertificate());
+    char.printCertificate();
     // reboot();
   }
 
@@ -356,6 +349,6 @@ const textNodes = [
     ],
   },
 ];
+// startGame();
 
-startGame();
-// console.log(char.printCertificate("Ali"));
+console.log(char.printCertificate());

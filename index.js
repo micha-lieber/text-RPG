@@ -21,21 +21,21 @@ class Character {
     ];
     this.attacks = attacksArr;
   }
-  printCertificate() {
-    return figlet.text(
-      `  Hay  ${this.name} \n   Du hast \n gewonnen`,
-      {
-        font: "Ghost",
-        horizontalLayout: "default",
-        verticalLayout: "default",
-        width: 150,
-        whitespaceBreak: true,
-      },
-      function (err, data) {
-        console.log(data);
-      }
-    );
-  }
+  // printCertificate() {
+  //   return figlet.text(
+  //     `  Hay  ${this.name} \n   Du hast \n gewonnen`,
+  //     {
+  //       font: "Ghost",
+  //       horizontalLayout: "default",
+  //       verticalLayout: "default",
+  //       width: 150,
+  //       whitespaceBreak: true,
+  //     },
+  //     function (err, data) {
+  //       console.log(data);
+  //     }
+  //   );
+  // }
   printInventory() {
     return `You have \n ${this.inventory[0].content} pcs ${this.inventory[0].name}\n ${this.inventory[2].content} pcs ${this.inventory[2].name}`;
   }
@@ -54,6 +54,12 @@ class Character {
     });
   }
 }
+
+Character.prototype.printCertificate = function () {
+  // prototype of Character class
+  return `
+  \n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    :::::::::::      Glückwunsch! Du     :::::::::::\n    :::::::::::: hast dieses Abenteuer :::::::::::::\n    :::::::::::::::  ~~~~~ von ~~~  ::::::::::::::::\n    :::::::::::::::::   DRUNK GUY  :::::::::::::::::\n    ::::::::::::::::::     BOB    ::::::::::::::::::\n    ::::::::::::::::::  erledigt! ::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::`;
+};
 
 /**Default character */
 const char = new Character("test");
