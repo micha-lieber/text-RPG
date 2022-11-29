@@ -321,4 +321,6 @@ function random() {
 //     characterCreation(); // creates custom named character
 //     situation() // ruft Startsetting auf
 // }
-console.log(char.printCertificate());
+// console.log(char.printCertificate());
+
+startGame();
