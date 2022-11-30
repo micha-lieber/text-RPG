@@ -7,6 +7,9 @@ let clc = require("cli-color");
 var player = require("play-sound")((opts = {}));
 // player.play("./assets/ManyPunches-SoundBiblecom-1623072177.mp3");
 
+const beginn = () =>
+player.play("assets/Movie_Start_Music-KP-241927993.mp3");
+
 // current date for scene 12
 let date = new Date();
 
@@ -98,6 +101,7 @@ const char = new Character(
 
 // starts the game
 function startGame() {
+  beginn();
   showTextNode(0);
 }
 
@@ -1092,9 +1096,11 @@ function showTextNode(textNodeIndex) {
   // VARIABLE STORING OPTION LENGTHS
   let optionsLength = textNode.options.length;
 
+
   // ALLOWS ANY KEY INPUT TO START THE GAME
   let nextText = 1;
   if (textNodeIndex == 0) {
+    
     showTextNode(nextText);
   } else {
     // CHECKS FOR CORRECT PLAYER INPUT:
