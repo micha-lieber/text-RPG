@@ -1,17 +1,16 @@
 var readlineSync = require("readline-sync");
-// run "npm install cli-color" beforehand!!
-let clc = require("cli-color");
-var player = require("play-sound")((opts = {}));
 const { exit } = require("process");
+// run "npm install cli-color" beforehand!
+let clc = require("cli-color");
 
-// player.play('./assets/ManyPunches-SoundBiblecom-1623072177.mp3', function (err) {if (err) throw err})
+// run "npm install play-sound" if you want to add sounds.
+var player = require("play-sound")((opts = {}));
+// player.play("./assets/ManyPunches-SoundBiblecom-1623072177.mp3");
 
-/////// variables for the game
-
-// variable storing the date
+// current date for scene 12
 let date = new Date();
 
-// textnode --> an entire scene
+// stores entire scenes
 let textNode;
 
 // default attacks
@@ -21,15 +20,14 @@ const attacksArr = [
   { name: "Tritt gegen das Knie", damage: 30 },
 ];
 
-// enemy number one
-
+// first enemy
 const enemyOne = {
   name: "Napoleon Dynamite",
   life: 100,
   attacks: attacksArr,
 };
 
-/** BOSS enemy */
+// boss enemy
 const boss = {
   name: "Chaooos",
   life: 200,
@@ -50,19 +48,20 @@ const boss = {
   ],
 };
 
-/**Character class for main hero */
+// class for main character
 class Character {
-  // this is the class constructor for character creation
+  // class constructor for character creation
   constructor(name) {
     this.name = name;
     this.life = 100;
     this.inventory = [
-      { nameInv: "zettel", content: "einer liederlich geschriebene Adresse" },
+      { nameInv: "Zettel", content: "Eine liederlich geschriebene Adresse" },
       { nameInv: "Gold", content: 0 },
     ];
     this.attacks = attacksArr;
   }
 
+  // inventory-function for item-display, -addition and -removal
   printInventory() {
     console.clear();
     console.log(
@@ -85,26 +84,27 @@ class Character {
   }
 }
 
+// congratulatory message after player completes the game
 Character.prototype.printCertificate = function () {
-  // prototype of Character class
+  // prototype of character class
   console.log(`
   \n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    :::::::::::      Glückwunsch! Du     :::::::::::\n    :::::::::::: hast dieses Abenteuer :::::::::::::\n    :::::::::::::::  ~~~~~ von ~~~  ::::::::::::::::\n    :::::::::::::::::   DRUNK GUY  :::::::::::::::::\n    ::::::::::::::::::     BOB    ::::::::::::::::::\n    ::::::::::::::::::  erledigt! ::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::\n    ::::::::::::::::::::::::::::::::::::::::::::::::`);
 };
 
-/**Default character */
+// default character
 const char = new Character(
   readlineSync.question(`  Wie heißt du? (Max. 10 Buchstaben)    `)
 );
 
-/** starts the game  */
+// starts the game
 function startGame() {
   showTextNode(0);
 }
-// ALL SCENES AND OPTIONS
-// EVERY DEATH SCENE SHOULD TAKE YOU TO A SPECIAL PRE-DEATH DESCRIBING YOUR DEATH
-// AND AFTERWARDS INITIATE DEATH
+
+// all scenes:
+// note: every death-trigger should take player to a special pre-death scene and initiate death afterwards.
 const textNodes = [
-  // SCENE - 00 - START
+  // scene - 00 - start
   {
     id: 0,
     text: `                      
@@ -120,90 +120,90 @@ const textNodes = [
       },
     ],
   },
-  // SCENE - 01 - INTRO
+  // scene - 01 - intro
   {
     id: 1,
     text: `\n\n   An einem Tisch in einer Taverne, wachst du auf. Dein Kopf dröhnt vor Schmerzen. Wo bist du?\n   Was ist passiert? Dir an den Kopf fassend, atmest du tief ein. Die Luft ist feucht, warm und\n   stinkt nach einer bittersüßlichen Mischung verschiedenster Körpergerüche. Deine Hand greift\n   nach deinem Mund, fast hättest du dich übergeben. Ein unerträglicher Durst erfasst dich. Wasser.\n   Du brauchst Wasser. Zum Glück steht ein Glas kristallklares, eiskaltes Wasser direkt vor dir.
     \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
 
-    // SCENE - 01 - OPTIONS
+    // scene - 01 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `\n        1. Ohne nachzudenken nach dem Glas schnappen und es deinen gierigen, vertrockneten Schlund hinunter kippen!\n`,
 
-        // INITIATES: PRE-DEATH - 02
+        // initiates: pre-death - 02
         nextText: 2,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `\n        2. Ignoriere das Glas, wer weiß was diese durchsichtige Flüssigkeit wirklich ist? Du schaust dich um.\n`,
 
-        // INITIATES: SCENE - 03
+        // initiates: scene - 03
         nextText: 3,
       },
     ],
   },
-  // SCENE - 02 - PRE-DEATH: WASSER
+  // scene - 02 - pre-death: wasser
   {
     id: 2,
     text: `\n   Ahh, ein süßes, die Kehle befeuchtendes, eiskaltes Glas Wass... Wa... Was? Das ist kein Wasser!\n   Das ist Rum! Purer Rum! Du stirbst innerlich als das dir der Alkohol den Hals hinunter brennt.\n   Uh-oh, du fühlst, wie sich dein Magen dreht und krümmt, fast so als würde es protestieren.\n`,
 
-    // SCENE - 02 - OPTIONS
+    // scene - 02 - options
     options: [
       {
         text: clc.redBright(`\n        Du hälst es nicht mehr aus! Deine Augen suchen panisch nach einer Ecke, einem Eimer, irgendwas worin du dich\n        übergeben kannst, doch es ist zu spät. Ein blubberndes, gurgelndes Geräusch entfleucht deinen trockenen Lippen,\n        während dir dein Mageninhalt hochgeschossen kommt. Für einen kurzen Moment wirkst du, wie ein majestätischer\n        Vulkan, der sich in Lava ergießt. Tränend, rollen sich deine Augen nach hinten, du besudelst dich und den\n        unschuldigen Tisch mit deinem Erbrochenen.\n\n        Du verlierst dein Bewusstsein. Majestätisch sah das jetzt nicht aus...
         `),
 
-        // INITIATES: DEATH
+        // initiates: death
         nextText: 99,
       },
     ],
   },
-  // SCENE - 03 - TAVERNE
+  // scene - 03 - taverne
   {
     id: 3,
     text: `\n   Du befindest dich in einer dreckigen, heruntergekommenen Taverne. Um dich herum allerlei Menschen,\n   beschäftigt sich zu betrinken oder verwickelt in lautstarkem Suffgeschwätz. Dazu noch die\n   Lautstärke der Musik und dir ist sofort bewusst, woher die Kopfschmerzen kommen. Zumindest zum Teil,\n   schließlich hast du auch ordentlich einen im Tee, mein Bester.
 \n   Links hinter dir öffnet sich eine Tür und ein Mann tritt herein. Er nickt einigen Gästen zu\n   und wendet sich, seine Jacke aufknöpfend, dem Kleiderhaken zu.\n   Das muss der Ausgang sein, denkst du dir.
 \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
 
-    // SCENE - 03 - OPTIONS
+    // scene - 03 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: "\n        1. Gehe zum Wirt und frage ihn, ob er weiß was mit dir passiert ist.\n",
 
-        // INITIATES: SCENE - 04
+        // initiates: scene - 04
         nextText: 4,
       },
 
-      //  OPTION - 02
+      // option - 02
       {
         text: "\n        2. Warte bis der Mann sich von der Tür entfernt, pack' deine Habseligkeiten und fliehe sofort aus der Taverne!\n",
 
-        // INITIATES: SCENE - 05
+        // initiates: scene - 05
         nextText: 5,
       },
 
-      //  OPTION - 03
+      // option - 03
       {
         text: "\n        3. Das Glas Wasser flirtet dich die ganze Zeit schon an, du kannst der Versuchung nicht länger widerstehen! \n",
 
-        // INITIATES: PRE-DEATH - 02
+        // initiates: pre-death - 02
         nextText: 2,
       },
     ],
   },
-  // SCENE - 04 - WIRT
+  // scene - 04 - wirt
   {
     id: 4,
     text: `\n   Der Wirt nickt dir zu, als er dich am Tresen empfängt. Er wirft einen, kurzen, durchdringenden Blick\n   auf dich und schnauft. Ehe du dich versiehst, steht ein großer, durchsichtiger Krug vor dir. Du siehst\n   trockener aus, als meine Frau nachts im Bett, mein Freund, posaunt er laut und klopft dir dabei lachend\n   auf die Schulter. Das Wasser hier geht auf's Haus, lang zu bevor du mir hier noch umkippst, fügt er hinzu.\n   Bevor er zu Ende reden kann, hängst du mit deinen gierigen Lippen schon am Krug.\n\n   Erfrischend, kaltes Wasser fließt dir angenehm kühlend den Hals hinunter.\n   Was kann ich für dich tun Kleiner? Fragt er dich, erstaunt darüber, wie schnell du den Krug geleert hast.
     \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
 
-    // SCENE - 04 - OPTIONS
+    // scene - 04 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: "\n        1. Danke ihm und falle über den Krug her. Wasser, Wasser... An was anderes kannst du nicht mehr denken.\n",
 
@@ -1045,7 +1045,6 @@ function showTextNode(textNodeIndex) {
         return obj;
       }
     });
-    console.log("gold added");
   }
   // CHECKS FOR BAD CHOICE AND SENDS PLAYER TO DEATH SCENE
   // A BAD CHOICE IS ANY OPTION WITH NEXTTEXT 10
@@ -1063,6 +1062,7 @@ function showTextNode(textNodeIndex) {
   if (textNode.options[0].nextText === 666) {
     let y = fight(enemyOne);
     if (y) {
+      char.life = 100;
       showTextNode(10001);
     } else {
       reboot();
@@ -1081,7 +1081,7 @@ function showTextNode(textNodeIndex) {
   /**leads to end screen after victory */
   if (textNode.options[0].nextText === 1337) {
     readlineSync.question("Taste drücken um fortzufahren");
-
+    victory();
     char.printCertificate();
     readlineSync.question("Taste drücken um fortzufahren");
     reboot();
@@ -1151,6 +1151,9 @@ function reset() {
   char.life = 100;
   boss.life = 200;
 }
+
+const victory = () =>
+  player.play("assets/Short_triumphal_fanfare-John_Stracke-815794903.mp3");
 
 /** starts Battle with non-Boss enemy*/
 function fight(enemy) {
@@ -1265,6 +1268,7 @@ function fightBoss(boss) {
       // BOSS enemy dead
       if (boss.life < 1) {
         console.log(`\n${boss.name} ist besiegt.\n`);
+
         return true;
       }
     } else if (answer - 1 === 3) {
