@@ -1143,7 +1143,7 @@ function reset() {
   ];
   enemyOne.life = 100;
   char.life = 100;
-  boss.life = 999;
+  boss.life = 200;
 }
 
 /** starts Battle with non-Boss enemy*/
