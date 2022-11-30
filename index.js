@@ -1225,11 +1225,11 @@ function fightBoss(boss) {
   char.attacks = [
     {
       name: "Du holst dir eine große Mülltüte und stopfst alles was du findest hinein.",
-      damage: 100,
+      damage: 50,
     },
     {
       name: "Deine Freund*innen und Nachbar*innen kommen dir zu Hilfe und schrubben was das Zeug hält.",
-      damage: 100,
+      damage: 50,
     },
     {
       name: "Du wirfst alles was dir im Weg liegt aus dem Fenster. Nasse Klamotten, fauliges Obst, ungelesene Zeitungen, egal.",
