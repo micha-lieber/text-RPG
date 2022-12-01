@@ -4,9 +4,10 @@ const { exit } = require("process");
 let clc = require("cli-color");
 
 // run "npm install play-sound" if you want to add sounds.
-var player = require("play-sound")((opts = {}));
+let player = require("play-sound")((opts = {}));
 // player.play("./assets/ManyPunches-SoundBiblecom-1623072177.mp3");
 
+// plays this sound once, at the start of the game
 const beginn = () => player.play("assets/Movie_Start_Music-KP-241927993.mp3");
 
 // current date for scene 12
@@ -67,7 +68,7 @@ class Character {
   printInventory() {
     console.clear();
     console.log(
-      `Du hast \n ${this.inventory[0].nameInv} mit ${this.inventory[0].content}\n ${this.inventory[1].content} Stück ${this.inventory[1].nameInv}`
+      `Du hast: \n ${this.inventory[0].nameInv} mit ${this.inventory[0].content}\n ${this.inventory[1].content} Stück ${this.inventory[1].nameInv}`
     );
   }
   incrementInventory(name, num) {
@@ -84,7 +85,7 @@ class Character {
       }
     });
   }
-}
+};
 
 // congratulatory message after player completes the game
 Character.prototype.printCertificate = function () {
@@ -95,14 +96,14 @@ Character.prototype.printCertificate = function () {
 
 // default character
 const char = new Character(
-  readlineSync.question(`  Wie heißt du? (Max. 10 Buchstaben)    `)
+  readlineSync.question(`  Wie ist dein Name? (Max. 10 Buchstaben)    `)
 );
 
 // starts the game
 function startGame() {
   beginn();
   showTextNode(0);
-}
+};
 
 // all scenes:
 // note: every death-trigger should take player to a special pre-death scene and initiate death afterwards.
@@ -123,6 +124,7 @@ const textNodes = [
       },
     ],
   },
+
   // scene - 01 - intro
   {
     id: 1,
@@ -148,6 +150,7 @@ const textNodes = [
       },
     ],
   },
+
   // scene - 02 - pre-death: wasser
   {
     id: 2,
@@ -164,6 +167,7 @@ const textNodes = [
       },
     ],
   },
+
   // scene - 03 - taverne
   {
     id: 3,
@@ -198,6 +202,7 @@ const textNodes = [
       },
     ],
   },
+
   // scene - 04 - wirt
   {
     id: 4,
@@ -210,94 +215,97 @@ const textNodes = [
       {
         text: "\n        1. Danke ihm und falle über den Krug her. Wasser, Wasser... An was anderes kannst du nicht mehr denken.\n",
 
-        // INITIATES: SCENE - 05
+        // initiates: scene - 05
         nextText: 5,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: "\n        2. Lehne sein Angebot dankend ab. Du hast dein eigenes Glas Wasser, vom Tisch an dem du eben noch warst, dabei. \n",
 
-        // INITIATES: PRE-DEATH - 02
+        // initiates: pre-death - 02
         nextText: 2,
       },
 
-      //  OPTION - 03
+      //  option - 03
       {
         text: "\n        3. Greife nach seinem Kragen und ziehe ihn zu dir herunter:\n           Hör' zu Arschloch! Nochmal falle ich auf deine KO-Drinks nicht herein! \n",
 
-        // INITIATES: PRE-DEATH - 06
+        // initiates: pre-death - 06
         nextText: 6,
       },
 
-      //  OPTION - 04
+      //  option - 04
       {
         text: "\n        4. Schau ihn leicht genervt an, dann den Krug. Wer weiß, was dir dieser Mann andrehen will.\n           Lehne sein Angebot dankend an und verlasse die Taverne. \n",
 
-        // INITIATES: SCENE - 05
+        // initiates: scene - 05
         nextText: 5,
       },
     ],
   },
-  // SCENE - 05 - DRAUßEN
+
+  // scene - 05 - draussen
   {
     id: 5,
     text: `\n   Du verlässt die Taverne und stehst auf einer offenen Straße. Es ist kalt. Saukalt. Die Art von alles\n   durchdringender Kälte, die selbst dein bestes Stück, wie einen verschrumpelten Pickel aussehen lässt.\n   Oder sah der schon vorher so aus? Hey, hey. Sorry. Ich bin zu weit gegangen, sei nicht traurig.\n   Auf die Größe kommt es schließlich nicht an, oder irgendwie sowas.\n\n   Eine Kutsche steht keine zehn Meter von dir entfernt und eine untersetzte Person auf dem\n   gegenüberliegenden Bordstein, die dich unverhohlen anstarrt.
   \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
 
-    // SCENE - 05 - OPTIONS
+    // scene - 05 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: "\n        1. Dich der Person zuwenden, die dich seltsam beäugelt und sie ansprechen.\n",
 
-        // INITIATES: SCENE - 10
+        // initiates: scene - 10
         nextText: 10,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: "\n        2. Den Kutscher ansprechen. Es ist verdammt kalt und du willst schleunigst nach Haus!\n",
 
-        // INITIATES: SCENE - 08
+        // initiates: scene - 08
         nextText: 8,
       },
 
-      //  OPTION - 03
+      //  option - 03
       {
         text: "\n        3. Umfallen. Liegen bleiben. Scheißtag.\n",
 
-        // INITIATES: PRE-DEATH - 07
+        // initiates: pre-death - 07
         nextText: 7,
       },
 
-      //  OPTION - 04
+      //  option - 04
       {
         text: "\n        4. Gott anbeten!\n",
 
-        // INITIATES: SCENE - 13
+        // initiates: scene - 13
         nextText: 13,
       },
     ],
   },
-  // SCENE - 06 - PRE-DEATH: WIRT
+
+  // scene - 06 - pre-death: wirt
   {
     id: 6,
     text: `\n   Mit einer Hand haut der Wirt laut auf den Tresen und mit der anderen greift er nach deiner Babyhand.\n   Spielen willst du, ja? Flüstert er dir berdrohlich zu, sich über dich beugend. Jetzt erst bemerkst du,\n   wie gewaltig groß der Wirt ist, deine Hand ist gar komplett in seiner Bärenpranse verschwunden.\n   Du stammelst unverständliches Zeug, ehe deine wirren Gedanken von einem stechenden Schmerz in deiner\n   Hand unterbrochen werden.`,
 
-    // SCENE - 06 - OPTIONS
+    // scene - 06 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: clc.redBright(`\n        Du schaust auf deine Hand. Deine Finger zeigen in unterschiedliche Richtungen. Du kannst dich\n        nicht erinnern, dass sie sich jemals hätten so drehen können. Der Wirt hat dir wohl einhändig\n        deine gesamte Hand zertrümmert. Viel Zeit mit den Schmerzen bleibt dir nicht, denn als nächstes\n        siehst du aus dem Augenwinkel eine gewaltige Faust, gleich einem allesvernichtenden Meteors,\n        auf dein Gesicht herunterdonnern.\n\n        Poof, dir gehen die Lichter aus. Was hast du Wicht dir nur dabei gedacht?
         `),
 
-        // INITIATES: DEATH
+        // initiates: death
         nextText: 99,
       },
     ],
   },
-  // SCENE - 07 - PRE-DEATH: KÄLTE
+
+  // scene - 07 - pre-death: kälte
   {
     id: 7,
     text: `
@@ -305,9 +313,9 @@ const textNodes = [
    Du willst dich gerade hochraffen, da hälst du kurz still, denkst nach und nickst
    dir selbst zu. Es scheint, als hättest du deine Entscheidung getroffen. Du bleibst liegen.`,
 
-    // SCENE - 07 - OPTIONS
+    // scene - 07 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: clc.redBright(`        
         
@@ -319,12 +327,13 @@ const textNodes = [
         du ein, dein Gesicht bleich und blau. Aufwachen wirst du sicherlich nicht mehr.
         `),
 
-        // INITIATES: DEATH
+        // initiates: death
         nextText: 99,
       },
     ],
   },
-  // SCENE - 08 - KUTSCHER: ERSTES TREFFEN I
+
+  // scene - 08 - kutscher: erstes treffen I
   {
     id: 8,
     text: `
@@ -332,40 +341,41 @@ const textNodes = [
    Soll ich Sie irgendwohin fahren?
    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
 
-    // SCENE - 08 - OPTIONS
+    // scene - 08 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        
         1. Ihm sagen, dass du keine Ahnung hast, wie du hier gelandet bist und nach Hause willst.
         `,
 
-        // INITIATES: SCENE - 09
+        // initiates: scene - 09
         nextText: 9,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `
         2. Dich wieder von ihm abwenden. Die Person, die dich anstarrt ist doch interessanter.
         `,
 
-        // INITIATES: SCENE - 10
+        // initiates: scene - 10
         nextText: 10,
       },
 
-      //  OPTION - 03
+      //  option - 03
       {
         text: `
         3. Eine transzendente Stimme flüstert dir zu. Dir wird ganz warm in der Brust.
         `,
 
-        // INITIATES: SCENE - 13
+        // initiates: scene - 13
         nextText: 13,
       },
     ],
   },
-  // SCENE - 09 - KUTSCHER: ERSTES TREFFEN II
+
+  // scene - 09 - kutscher: erstes treffen II
   {
     id: 9,
     text: `
@@ -375,9 +385,9 @@ const textNodes = [
    )} kosten.
    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
 
-    // SCENE - 09 - OPTIONS
+    // scene - 09 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        
         1. ${clc.yellowBright(
@@ -385,33 +395,34 @@ const textNodes = [
         )}?! Sieht dieser Mann nicht, wie elend es dir geht? Du schnellst nach vorne um nach seiner Jacke zu greifen, fast blind vor Wut.
         `,
 
-        // INITIATES: PRE-DEATH - 07
+        // initiates: pre-death - 07
         nextText: 7,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `        
         2. Den Kopf schütteln und sein Angebot ablehnen. Geld hast du keins. Vielleicht kann dir die untergesetzte Person weiterhelfen?
            Schließlich starrt sie dich schon die ganze Zeit an.
         `,
 
-        // INITIATES: SCENE - 10
+        // initiates: scene - 10
         nextText: 10,
       },
 
-      //  OPTION - 03
+      //  option - 03
       {
         text: `
         3. Eine transzendente Stimme flüstert dir zu. Die Stimme ist überwältigend...
         `,
 
-        // INITIATES: SCENE - 13
+        // initiates: scene - 13
         nextText: 13,
       },
     ],
   },
-  // SCENE - 10 - PERSON: ERSTES TREFFEN I
+
+  // scene - 10 - person: erstes treffen I
   {
     id: 10,
     text: `
@@ -421,36 +432,37 @@ const textNodes = [
    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
    `,
 
-    // SCENE - 10 - OPTIONS
+    // scene - 10 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        1. Nach Geld fragen.
         `,
 
-        // INITIATES: SCENE - 11
+        // initiates: scene - 11
         nextText: 11,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `        2. Nach dem aktuellen Datum fragen.
         `,
 
-        // INITIATES: SCENE - 12
+        // initiates: scene - 12
         nextText: 12,
       },
 
-      // OPTION - 03
+      // option - 03
       {
         text: `        3. Die Person beleidigen: Deine Hässlichkeit brennt mir die Augen aus meinem Schädel!`,
 
-        // INITIATES: FIGHT
+        // initiates: FIGHT
         nextText: 9999,
       },
     ],
   },
-  // SCENE - 11 - PERSON: ERSTES TREFFEN II
+
+  // scene - 11 - person: erstes treffen II
   {
     id: 11,
     text: `
@@ -461,28 +473,29 @@ const textNodes = [
    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
    `,
 
-    // SCENE - 11 - OPTIONS
+    // scene - 11 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        1. Nach dem aktuellen Datum fragen.
         `,
 
-        // INITIATES: SCENE - 12
+        // initiates: scene - 12
         nextText: 12,
       },
 
-      // OPTION - 02
+      // option - 02
       {
         text: `        2. Die Person angreifen: Her mit deinem Geldbeutel, du dreckiger Geizkragen!
         `,
 
-        // INITIATES: FIGHT
+        // initiates: FIGHT
         nextText: 9999,
       },
     ],
   },
-  // SCENE - 12 - PERSON: ERSTES TREFFEN III
+
+  // scene - 12 - person: erstes treffen III
   {
     id: 12,
     text: `
@@ -498,27 +511,28 @@ const textNodes = [
    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
    `,
 
-    // SCENE - 12 - OPTIONS
+    // scene - 12 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        1. Ihr danken und dich von ihr abwenden. Du vernimmst ein transzendentes Flüstern: Bete mich an und ich helfe dir...
           `,
 
-        // INITIATES: SCENE - 13
+        // initiates: scene - 13
         nextText: 13,
       },
 
-      // OPTION - 02
+      // option - 02
       {
         text: `        2. Die Person beleidigen: Meine Faust schickt dich gleich in's vergangene Jahrhundert, du Blechbirne!`,
 
-        // INITIATES: FIGHT
+        // initiates: fight
         nextText: 9999,
       },
     ],
   },
-  // SCENE - 13 - ENGEL
+
+  // scene - 13 - engel
   {
     id: 13,
     text: `
@@ -536,37 +550,38 @@ const textNodes = [
    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)},
    `,
 
-    // SCENE - 11 - OPTIONS
+    // scene - 11 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        1. Zur Person von vorhin zurück gehen.
           `,
 
-        // INITIATES: SCENE - 15
+        // initiates: scene - 15
         nextText: 15,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `        2. Zum Kutscher gehen.
           `,
 
-        // INITIATES: SCENE - 14
+        // initiates: scene - 14
         nextText: 14,
       },
 
-      //  OPTION - 03
+      //  option - 03
       {
         text: `        3. Zurück in die Taverne gehen. Du brauchst jetzt Alkohol. Ganz viel Alkohol!
           `,
 
-        // INITIATES: PRE-DEATH - 16
+        // initiates: pre-death - 16
         nextText: 16,
       },
     ],
   },
-  // SCENE - 14 - KUTSCHER: NACH ENGEL I
+
+  // scene - 14 - kutscher: nach engel I
   {
     id: 14,
     text: `
@@ -575,40 +590,41 @@ const textNodes = [
    Eine schöne Dame sitzt bereits in der Kutsche. Ihr Anlitz liebkost deine Äuglein, du Perversling.
    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
 
-    // SCENE - 14 - OPTIONS
+    // scene - 14 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        
         1. Dem Kutscher sagen, dass du zu der Adresse auf dem Zettel willst.
           `,
 
-        // INITIATES: SCENE - 17
+        // initiates: scene - 17
         nextText: 17,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `        
         2. Deine Meinung ändern und doch lieber zur untergesetzten Person von eben gehen.
           `,
 
-        // INITIATES: SCENE - 15
+        // initiates: scene - 15
         nextText: 15,
       },
 
-      //  OPTION - 03
+      //  option - 03
       {
         text: `        
         3. Sagen, dass du in die gleiche Richtung, wie die schöne Dame fährst. (Du Perversling.)
           `,
 
-        // INITIATES: PRE-DEATH - 20
+        // initiates: pre-death - 20
         nextText: 20,
       },
     ],
   },
-  // SCENE 15 - PERSON: NACH ENGEL I
+
+  // scene 15 - person: nach engel I
   {
     id: 15,
     text: `
@@ -617,30 +633,31 @@ const textNodes = [
    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
    `,
 
-    // SCENE - 15 - OPTIONS
+    // scene - 15 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        
         1. Der untergesetzten Person nuschelnd die Adresse auf dem Zettel zeigen.
             `,
 
-        // INITIATES: SCENE - 18
+        // initiates: scene - 18
         nextText: 18,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `
         2. Doch lieber zurück zum Kutscher gehen.
             `,
 
-        // INITIATES: SCENE - 14
+        // initiates: scene - 14
         nextText: 14,
       },
     ],
   },
-  // SCENE - 16 - PRE-DEATH: TAVERNE NACH ENGEL
+
+  // scene - 16 - pre-death: taverne nach engel
   {
     id: 16,
     text: `
@@ -652,9 +669,9 @@ const textNodes = [
    One-Way Ticket entschieden.
    `,
 
-    // SCENE - 16 - OPTIONS
+    // scene - 16 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: clc.redBright(`     
         Der Wirt schnauft und stellt dir eine gewaltige Flasche puren Spiritus hin. Determiniert greifst du nach der Flasche und trinkst diese
@@ -666,12 +683,13 @@ const textNodes = [
         Bezahlen wirst du nichts mehr.
         `),
 
-        // INITIATES: DEATH
+        // initiates: death
         nextText: 99,
       },
     ],
   },
-  // SCENE - 17 - KUTSCHER: NACH ENGEL II
+
+  // scene - 17 - kutscher: nach engel II
   {
     id: 17,
     text: `
@@ -681,9 +699,9 @@ const textNodes = [
    )}, mein Herr.
  \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}`,
 
-    // SCENE - 17 - OPTIONS
+    // scene - 17 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        
       1. Deine ${clc.yellowBright(
@@ -693,21 +711,21 @@ const textNodes = [
         }. Zeig den Zettel lieber der Person von eben. 
         `,
 
-        // INITIATES: SCENE - 18
+        // initiates: scene - 18
         nextText: 18,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `        
       2. Die Dame in der Kutsche anflirten. (War ja klar du Perversling.)
         `,
 
-        // INITIATES: PRE-DEATH - 20
+        // initiates: pre-death - 20
         nextText: 20,
       },
 
-      // Option -03
+      // option - 03
       {
         text: `        
       3. Ihm von deinen ${char.inventory[1].content} Goldstücken lässig zehn in den Schoß werfen und dich wortlos in die Kutsche setzen. 
@@ -718,7 +736,8 @@ const textNodes = [
       },
     ],
   },
-  // SCENE 18 - PERSON: NACH ENGEL II
+
+  // scene 18 - person: nach engel II
   {
     id: 18,
     text: `
@@ -727,30 +746,31 @@ const textNodes = [
 \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
 `,
 
-    // SCENE - 18 - OPTIONS
+    // scene - 18 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        
         1. Der untergesetzten Person nuschelnd die Adresse auf dem Zettel zeigen.
         `,
 
-        // INITIATES: SCENE - 19
+        // initiates: scene - 19
         nextText: 19,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `
         2. Doch lieber zurück zum Kutscher gehen.
         `,
 
-        // INITIATES: SCENE - 14
+        // initiates: scene - 14
         nextText: 14,
       },
     ],
   },
-  // SCENE 19 - PERSON: NACH ENGEL III
+
+  // scene 19 - person: nach engel III
   {
     id: 19,
     text: `
@@ -766,30 +786,31 @@ const textNodes = [
    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
 `,
 
-    // SCENE - 19 - OPTIONS
+    // scene - 19 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        
         1. Den Anweisungen der Person folgen und dich auf den Weg zur Bäckerei machen.
         `,
 
-        // INITIATES: SCENE - 21
+        // initiates: scene - 21
         nextText: 21,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `
         2. Doch lieber zurück zum Kutscher gehen. (Kann da einer etwa die hübsche Dame nicht vergessen?)
         `,
 
-        // INITIATES: SCENE - 14
+        // initiates: scene - 14
         nextText: 14,
       },
     ],
   },
-  // SCENE - 20 - PRE-DEATH: DAME IN DER KUTSCHE
+
+  // scene - 20 - pre-death: dame in der kutsche
   {
     id: 20,
     text: `
@@ -802,9 +823,9 @@ const textNodes = [
    betreten willst, findet der Kutscher genauso wenig amüsant.
    `,
 
-    // SCENE - 20 - OPTIONS
+    // scene - 20 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: clc.redBright(`     
         ${clc.red("BANG !!")}
@@ -820,12 +841,13 @@ const textNodes = [
         Was hast du hoffnungsloser Jammerlappen auch erwartet?
         `),
 
-        // INITIATES: DEATH
+        // initiates: death
         nextText: 99,
       },
     ],
   },
-  // SCENE 21 - BÄCKEREI I
+
+  // scene 21 - bäckerei I
   {
     id: 21,
     text: `
@@ -838,41 +860,42 @@ const textNodes = [
    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
 `,
 
-    // SCENE - 21 - OPTIONS
+    // scene - 21 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        
         1. Woher kennt dich die Trulla?! Frage sie, was sie über dich weiß.
         `,
 
-        // INITIATES: SCENE - 22
+        // initiates: scene - 22
         nextText: 22,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `
         2. Verlasse sofort die Bäckerei, das wird dir alles zu viel!
         `,
 
-        // INITIATES: PRE-DEATH - 07
+        // initiates: pre-death - 07
         nextText: 7,
       },
 
-      //  OPTION - 03
+      //  option - 03
       {
         text: `
         3. 'Wohl nicht genug, du bist immernoch hässlich!', eschauffierst du dich
             und begibst dich schnurstracks zur Taverne zurück.
         `,
 
-        // INITIATES: PRE-DEATH - 16
+        // initiates: pre-death - 16
         nextText: 16,
       },
     ],
   },
-  // SCENE - 22 - BÄCKEREI II
+
+  // scene - 22 - bäckerei II
   {
     id: 22,
     text: `
@@ -887,40 +910,41 @@ const textNodes = [
    \n${clc.magentaBright(`   Was wirst du tun? (Press a number to contine)`)}
    `,
 
-    // SCENE - 22 - OPTIONS
+    // scene - 22 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        
         1. Alles dreht sich, du hast Kreislauf! Flüchte nach draußen an die kalte, frische Luft!!
         `,
 
-        // INITIATES: PRE-DEATH - 07
+        // initiates: pre-death - 07
         nextText: 07,
       },
 
-      //  OPTION - 02
+      //  option - 02
       {
         text: `
         2. Nichts macht mehr Sinn! Du verlässt die Bäckerei und rennst zur Taverne zurück.
         `,
 
-        // INITIATES: PRE-DEATH - 16
+        // initiates: pre-death - 16
         nextText: 16,
       },
 
-      // OPTION - 03
+      // option - 03
       {
         text: `
         3. Danke ihr herzlichst und eile zur Treppe hinter'm Tresen, die hoch zu deine Wohnung führt. 
         `,
 
-        // INITIATES: SCENE - 23
+        // initiates: scene - 23
         nextText: 23,
       },
     ],
   },
-  // SCENE - 23 - WOHNUNG
+
+  // scene - 23 - wphnung
   {
     id: 23,
     text: `
@@ -931,35 +955,37 @@ const textNodes = [
    \n${clc.magentaBright(`   Eine enorme Präsenz erscheint vor dir!`)}
    `,
 
-    // SCENE - 23 - OPTIONS
+    // scene - 23 - options
     options: [
-      //  OPTION - 01
+      //  option - 01
       {
         text: `        
         1. Reiß' deine Arme hoch und stürz' dich in den Kampf! 
         `,
 
-        // INITIATES: BOSS FIGHT
+        // initiates: boss fight
         nextText: 10003,
       },
     ],
   },
-  // SCENE - 99 - DEATH
-  // EMPTY TEXT AND EMPTY OPTION TO AVOID "UNDEFINED" RETURNS
-  // GAME SHOULD REBOOT WHENEVER THIS SCENE IS READ
+
+  // scene - 99 - death
+  // empty text and empty option to avoid "undefined" returns
+  // game should reboot whenever this scene is read
   {
     id: 99,
     text: ``,
     options: [{ text: `` }],
   },
-  // Node 9999 FIGHT SCENE Enemy 1
+  
+  // node 9999 fight scene enemy 1
   {
     id: 9999,
     text: "\n:::::: Sie brüllt:'Dir bring ich manieren bei!' und erhebt ihre Fäuste zum Kampf. :::::: \n",
     options: [{ text: "", nextText: 666 }],
   },
 
-  //Node 10001 After Battle with Enemy 1
+  // node 10001 after battle with enemy 1
   {
     id: 10001,
     text: `\nDu blickst dich auf der Straße um.\nVor dir liegt ${enemyOne.name} und atmet schwer.\nDer Kutscher starrt dich irritiert an, du hörst wie Fensterläden geschlossen werden.\nDu bemerkst ein Straßenschild: 'F. - Eusch - Allee'. Das ist der Name der auf deinem Zettel steht!.\n
@@ -971,7 +997,7 @@ const textNodes = [
       },
       {
         text: "\n2. Dem Straßenverlauf folgen und die Adresse suchen.\n",
-        nextText: 21, // Bäckerei Node einfügen
+        nextText: 21, // bäckerei node einfügen
       },
       {
         text: "\n3. Zurück in die Kneipe gehen.\n",
@@ -979,7 +1005,8 @@ const textNodes = [
       },
     ],
   },
-  // node 10002 / zurück zu Kneipe - GameOver
+
+  // node 10002 / zurück zu kneipe - game over
   {
     id: 10002,
     text: `Du gehst zurück in die Kneipe, setzte dich an den Tresen und bestellst Vodka.`,
@@ -991,14 +1018,14 @@ const textNodes = [
     ],
   },
 
-  // node 10003 for BOSS FIGHT
+  // node 10003 for boss fight
   {
     id: 10003,
     text: "\n:::::: Chaos wirft sich dir mit aller Kraft entgegen, als du versuchst, dir einen Weg durch die Wohnung zu bahnen. Ihr müsst kämpfen! :::::: \n",
     options: [{ text: "", nextText: 667 }],
   },
 
-  // node 10004 AFTER BOSS FIGHT
+  // node 10004 after boss fight
   {
     id: 10004,
     text: `\n Du fühlst dich ausgezehrt von dem langen Kampf. Die Mittagssonne scheint durch deine geputzten Fenster herein und die in der Luft tanzenden Staubflocken malen Schattenspiele an die Wände. Es ist vorbei. Du hast gewonnen! Zufrieden sinkst du in dein Bett und schließt die Augen.\n`,
@@ -1011,22 +1038,21 @@ const textNodes = [
   },
 ];
 
-/////////// Functions for the game
+/////////////////// functions for the game ///////////////////
 
-/**runs the story line and makes it interactive */
+// runs the story line and makes it interactive
 function showTextNode(textNodeIndex) {
-  //random event
+  // random event
   random(textNodeIndex);
 
-  // FINDS A SCENE BY ID AND LOGS ITS TEXT FIRST
+  // finds a scene by id and logs it first
   textNode = textNodes.find((textNode) => textNode.id === textNodeIndex);
 
-  // ENHANCES VISUAL CLARITY WITH COLOR VARIETY
-  // TURNS START SCREEN YELLOW AND OTHER SCENES CYAN
+  // enhances visual clarity with color variety
   if (textNodeIndex == 0) console.log(clc.yellow(textNode.text));
   else console.log(clc.cyan(textNode.text));
 
-  // MAPS THROUGH OPTIONS OF A SCENE AND LOGS THEM SECOND
+  // maps through options of a scene and logs them second
   textNode.options.map((option) => console.log(clc.whiteBright(option.text)));
 
   if (textNodeIndex == 11) {
@@ -1037,20 +1063,25 @@ function showTextNode(textNodeIndex) {
         return obj;
       }
     });
-  }
-  // CHECKS FOR BAD CHOICE AND SENDS PLAYER TO DEATH SCENE
-  // A BAD CHOICE IS ANY OPTION WITH NEXTTEXT 10
+  };
+
+// plays this sound once, when player dies (scene 99 is displayed)
+const death = () => player.play("assets/game-over-man.mp3");
+
+// checks for bad choice and sends player to death
   if (textNode.options[0].nextText === 99) {
+    death();
     console.log(
       clc.red(
         "\n\n                --x----x----x----x----x----x----x----x----x----x-- \n                        ~~> GAME OVER, MAN! GAME OVER! <~~\n                --x----x----x----x----x----x----x----x----x----x--\n\n\n"
       )
     );
 
-    // REBOOTS GAME AFTER PLAYER MADE BAD CHOICE
+    // reboots game after player made bad choice (death)
     reboot();
-  }
-  /** initiates fight agains napoleon dynamite */
+  };
+
+  // initiates fight agains napoleon dynamite
   if (textNode.options[0].nextText === 666) {
     let y = fight(enemyOne);
     if (y) {
@@ -1059,8 +1090,9 @@ function showTextNode(textNodeIndex) {
     } else {
       reboot();
     }
-  }
-  /** initiates bossfight */
+  };
+
+  // initiates bossfight
   if (textNode.options[0].nextText === 667) {
     let x = fightBoss(boss);
     if (x) {
@@ -1068,29 +1100,31 @@ function showTextNode(textNodeIndex) {
     } else {
       reboot();
     }
-  }
+  };
 
-  /**leads to end screen after victory */
+  // leads to end screen after victory
   if (textNode.options[0].nextText === 1337) {
     readlineSync.question("Taste drücken um fortzufahren");
     victory();
     char.printCertificate();
     readlineSync.question("Taste drücken um fortzufahren");
     reboot();
-  }
-  // ASKS PLAYER TO CHOOSE FROM MAX 4 OPTIONS
+  };
+
+  // asks player to choose from max 4 options
   let answer = readlineSync.question();
 
-  // VARIABLE STORING OPTION LENGTHS
+  // varible storing option lengths
   let optionsLength = textNode.options.length;
 
-  // ALLOWS ANY KEY INPUT TO START THE GAME
+  // allows any key input to start the game
   let nextText = 1;
   if (textNodeIndex == 0) {
     showTextNode(nextText);
   } else {
-    // CHECKS FOR CORRECT PLAYER INPUT:
-    // REPLAYS CURRENT SCENE UPON FAULTY INPUT
+
+    // checks for correct player input:
+    // replays current scene upon faulty input
     if (
       (isNaN(answer) || answer > optionsLength || answer <= 0) &&
       answer !== "inventar"
@@ -1104,21 +1138,23 @@ function showTextNode(textNodeIndex) {
       );
       showTextNode(textNodeIndex);
     } else if (answer === "inventar") {
-      /** prints inventory upon request */
+
+      // prints inventory upon request
       char.printInventory();
       showTextNode(textNodeIndex);
     } else {
-      // INITIATES NEXT SCENE UPON CORRECT INPUT
+
+      // initiates next scene upon correct input
       nextText = textNode.options[answer - 1].nextText;
 
-      // CLEARS CURRENT SCENE OFF THE WINDOW AFTER INPUT
+      // clears current scene off the window after input
       console.clear();
       showTextNode(nextText);
-    }
-  }
-}
+    };
+  };
+};
 
-/** restarts the game after gameOver */
+// restarts the game after game over
 function reboot() {
   let reboot = readlineSync.question(
     `\n-------------- Spiel erneut starten? (y = ja, n = nein) ------------------\n`
@@ -1132,8 +1168,9 @@ function reboot() {
     console.log("Tschüssikowski!");
     exit();
   }
-}
-/**function resets life and inventory to start fresh */
+};
+
+// resets life and inventory to start fresh
 function reset() {
   char.inventory = [
     { name: "zettel", content: "eine liederlich geschriebene Adresse" },
@@ -1142,17 +1179,28 @@ function reset() {
   enemyOne.life = 100;
   char.life = 100;
   boss.life = 200;
-}
+};
 
+// plays this sound once, when the game is finished
 const victory = () =>
   player.play("assets/Short_triumphal_fanfare-John_Stracke-815794903.mp3");
 
-/** starts Battle with non-Boss enemy*/
+// plays this sound during normal fight
+const fightBGM = () =>
+  player.play("assets/Battle.mp3");
+
+// starts battle with non-boss enemy
 function fight(enemy) {
+
+  // don't know how to terminate media player post fight yet
+  // if (enemy.life != 0) {
+  //  fightBGM();
+  // }
+
   while (enemy.life > 0 && char.life > 0) {
     // player attack
     let answer = readlineSync.question(
-      `Was willst du tun? (1 = Ohrfeige, 2 = Faustschlag, 3 = Tritt gegen das Knie, 4 = warten)\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n`
+      `   ${clc.magentaBright("Was willst du tun?")} (1 = Ohrfeige, 2 = Faustschlag, 3 = Tritt gegen das Knie, 4 = warten)\n   ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n`
     );
 
     if (!answer) {
@@ -1209,11 +1257,11 @@ function fight(enemy) {
     readlineSync.question(`Taste drücken um fortzufahren`);
     console.clear();
   }
-}
+};
 
-/** starts Battle with BOSS enemy */
+// starts battle with boss
 function fightBoss(boss) {
-  /** Playerattacks in bossfight */
+  // player-attacks in bossfight
   char.attacks = [
     {
       name: "Du holst dir eine große Mülltüte und stopfst alles was du findest hinein.",
@@ -1241,7 +1289,7 @@ function fightBoss(boss) {
     // player attack
     let answer = Number(
       readlineSync.question(
-        `Was willst du tun? (1 = Aufräumen 2 = Um Hilfe rufen, 3 = Alles rauswerfen, 4 = Beten , 5 = Gehen)\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n`
+        `   ${clc.magentaBright("Was willst du tun?")} (1 = Aufräumen 2 = Um Hilfe rufen, 3 = Alles rauswerfen, 4 = Beten , 5 = Gehen)\n   ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n`
       )
     );
 
@@ -1257,7 +1305,7 @@ function fightBoss(boss) {
       );
       boss.life -= char.attacks[answer - 1].damage;
 
-      // BOSS enemy dead
+      // boss enemy dead
       if (boss.life < 1) {
         console.log(`\n${boss.name} ist besiegt.\n`);
 
@@ -1295,15 +1343,16 @@ function fightBoss(boss) {
     readlineSync.question(`Taste drücken um fortzufahren`);
     console.clear();
   }
-}
-/** shows life of the contestants in each round */
+};
+
+// shows life of the contestants in each round
 function fight_status(enemy) {
   console.log(
     `                 Your life: ${char.life} ------- Enemy life: ${enemy.life}\n`
   );
-}
+};
 
-/** gibt die Belohnung nach dem Kampf aus */
+// rewards after a fight
 function loot() {
   let belohnungsPacket = [10, 20, 25, 30];
   let stufe = Math.floor(Math.random() * 4);
@@ -1316,20 +1365,19 @@ function loot() {
     }
   });
   console.log(`Du hast ${bonus} Goldstücke bei deinem Gegner gefunden!`);
-}
+};
 
-/** Random encounter between scenes */
+// random encounter between all scenes
 function random(textNodeIndex) {
   let randomize = Math.floor(Math.random() * 100);
   if (randomize <= 10 && textNodeIndex > 5) {
     console.clear();
     char.life -= 3;
-    console.log(`Jemand wirft einen Blumentopf nach dir. Du verlierst 
-    3 Lebenspunkte`);
-    readlineSync.question("Taste drücken um fortzufahren");
+    console.log(clc.red("      \nJemand wirft einen Blumentopf nach dir! Du verlierst 3 Lebenspunkte!"));
+    readlineSync.question("   Taste druecken um fortzufahren");
   } else {
     return ``;
   }
-}
+};
 
 startGame();
