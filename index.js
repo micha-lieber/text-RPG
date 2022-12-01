@@ -7,8 +7,7 @@ let clc = require("cli-color");
 var player = require("play-sound")((opts = {}));
 // player.play("./assets/ManyPunches-SoundBiblecom-1623072177.mp3");
 
-const beginn = () =>
-player.play("assets/Movie_Start_Music-KP-241927993.mp3");
+const beginn = () => player.play("assets/Movie_Start_Music-KP-241927993.mp3");
 
 // current date for scene 12
 let date = new Date();
@@ -1014,19 +1013,8 @@ const textNodes = [
 
 /////////// Functions for the game
 
-/**  Function that enables user to put in their own charactername.*/
-function characterCreation() {
-  console.clear();
-  let fighterName = readlineSync.question(`  Wie heißt du?    `);
-  char.name = fighterName;
-  console.log(fighterName);
-  console.log(char.name);
-}
-/**starts the game */
-
 /**runs the story line and makes it interactive */
 function showTextNode(textNodeIndex) {
-  console.log(textNodeIndex);
   //random event
   random(textNodeIndex);
 
@@ -1096,11 +1084,9 @@ function showTextNode(textNodeIndex) {
   // VARIABLE STORING OPTION LENGTHS
   let optionsLength = textNode.options.length;
 
-
   // ALLOWS ANY KEY INPUT TO START THE GAME
   let nextText = 1;
   if (textNodeIndex == 0) {
-    
     showTextNode(nextText);
   } else {
     // CHECKS FOR CORRECT PLAYER INPUT:
@@ -1306,6 +1292,8 @@ function fightBoss(boss) {
     }
 
     fight_status(boss);
+    readlineSync.question(`Taste drücken um fortzufahren`);
+    console.clear();
   }
 }
 /** shows life of the contestants in each round */
