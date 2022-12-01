@@ -1,0 +1,12 @@
+11:40:13 From Micha To Everyone:
+	asci als bild mit figlet ging nicht
+11:40:29 From Micha To Everyone:
+	readline funktioniert nicht
+11:40:54 From Micha To Everyone:
+	package.json mit "type":"module" ging nicht mit readline
+11:42:29 From Micha To Everyone:
+	beim zusammenbauen haben wir logikfehler in der story erst gefunden (person wurde besiegt, aber kann wieder angesprochen werden)
+11:43:05 From Micha To Everyone:
+	reset nach neustart muss extra gemacht werden
+11:45:16 From Micha To Everyone:
+	break nach reboot
